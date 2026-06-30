@@ -19,7 +19,7 @@ void UUBAnimInstance::NativeInitializeAnimation()
 
     if (Monster = Cast<AUBBaseMonster>(Pawn))
     {
- 
+
         animCurrentState = Monster->GetCurrentActionState();
     }
     else if (Player = Cast<ASampleCharacter>(Pawn))
@@ -41,12 +41,12 @@ void UUBAnimInstance::PlayMontageGeneric(FGameplayTag ActionTag)
         return;
     }
     Montage_Play(Row->Montage);
-    //  델리게이트 생성
+
     FOnMontageEnded  EndDelegate;
-    //이  델리게이트가 호출될때 반환할 함수 바인딩 (OnMontageEnd()) 
+
     EndDelegate.BindUObject(this, &UUBAnimInstance::OnMontageEnd);
 
-    // RowMontage가  끝나면은  Endelegate를 호출하겠다.  선언
+
     Montage_SetEndDelegate(EndDelegate, Row->Montage);
 }
 
@@ -54,7 +54,7 @@ void UUBAnimInstance::PlayMontageGeneric(FGameplayTag ActionTag)
 
 void UUBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-    
+
     Super::NativeUpdateAnimation(DeltaSeconds);
     if (Monster)
     {
@@ -90,10 +90,10 @@ void UUBAnimInstance::OnMontageEnd(UAnimMontage* Montage, bool bInterrupted)
     {
         Player->OnActionFinished();
     }
-   
+
 
 }
 
-    
+
 
 

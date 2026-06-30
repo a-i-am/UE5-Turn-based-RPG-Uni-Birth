@@ -7,13 +7,13 @@
 #include "Kismet/GameplayStatics.h"
 void UUBTimeDelayANS::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	if (!MeshComp) 
-		return;                  
-	World = MeshComp->GetWorld();   
+	if (!MeshComp)
+		return;
+	World = MeshComp->GetWorld();
 	if (!World)
-		return;                     
+		return;
 
-	ABattleGameMode* GM = World->GetAuthGameMode<ABattleGameMode>(); 
+	ABattleGameMode* GM = World->GetAuthGameMode<ABattleGameMode>();
 	if (!GM)
 	return;
 	BM = GM->GetBattleManager();
@@ -43,6 +43,6 @@ void UUBTimeDelayANS::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	if(BM->bIsTimeDelay)
 	BM->SetGlobalTimeReset();
 
-	
+
 
 }

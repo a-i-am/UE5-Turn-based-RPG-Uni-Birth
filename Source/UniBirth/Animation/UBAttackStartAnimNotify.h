@@ -7,9 +7,9 @@
 #include "Common/UBdefine.h"
 #include "UBAttackStartAnimNotify.generated.h"
 
-///**
- //*
- //*/
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBAttackStartAnimNotify : public UAnimNotify
 {

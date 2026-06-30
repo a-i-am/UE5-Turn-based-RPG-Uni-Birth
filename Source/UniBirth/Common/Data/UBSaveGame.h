@@ -8,9 +8,9 @@
 #include "Common/SubSystem/UBInventorySubsystem.h"
 #include "UBSaveGame.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBSaveGame : public USaveGame
 {

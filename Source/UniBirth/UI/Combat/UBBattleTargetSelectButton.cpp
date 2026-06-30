@@ -13,7 +13,7 @@ void UUBBattleTargetSelectButton::SetButtonImage()
         return;
 
     ECharacterType charactertype = TargetUnit->characterType;
-    
+
     const FCharacterPortrait* Data = textures->FindData(charactertype);
     if (!Data)
     {

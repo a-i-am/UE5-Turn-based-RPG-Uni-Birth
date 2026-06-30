@@ -7,10 +7,10 @@
 #include "Common/UBdefine.h"
 #include "UBCharacterSelectCheckBox.generated.h"
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectChanged, const TArray<ECharacterType>&, NewSelectedCharacters);
-/**
- * 
- */
+
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCharacterSelectCheckBox : public UUserWidget
 {

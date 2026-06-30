@@ -19,9 +19,9 @@ struct FCharacterPortrait
     TObjectPtr<UTexture2D> Texture;
 };
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UCharacterPortraitData : public UDataAsset
 {

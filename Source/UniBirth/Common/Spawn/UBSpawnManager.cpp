@@ -10,19 +10,19 @@
 #include "Common/Data/UBSaveGame.h"
 #include "Battle/System/BattleGameMode.h"
 #include "Character/Enemy/UBBaseMonster.h"
-// Sets default values
+
 AUBSpawnManager::AUBSpawnManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
+
 void AUBSpawnManager::BeginPlay()
 {
 	Super::BeginPlay();
-     //PlayerClass.Empty();
+
 
     if (ABattleGameMode* gamemode = Cast<ABattleGameMode>(GetWorld()->GetAuthGameMode())) {
         if (UUBSaveGame* LoadedGame = Cast<UUBSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MainData"), 0)))
@@ -38,10 +38,10 @@ void AUBSpawnManager::BeginPlay()
             }
         }
     }
-    
+
 }
 
-// Called every frame
+
 void AUBSpawnManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -53,7 +53,7 @@ void AUBSpawnManager::SpawnPlayer()
 {
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUBSpawnPoint::StaticClass(), PlayerSpawnPoints);
 
-    //스폰 위치가 겹치면 살짝 ㅇ옆으로 이동해서 스폰하는 언리얼 코드
+
     FActorSpawnParameters Params;
     Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 

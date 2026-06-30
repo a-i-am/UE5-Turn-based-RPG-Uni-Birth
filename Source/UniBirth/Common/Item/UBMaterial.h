@@ -8,9 +8,9 @@
 #include "Common/UBdefine.h"
 #include "UBMaterial.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS(BlueprintType)
 class UNIBIRTH_API UUBMaterial : public UObject, public IUBItem
 {
@@ -22,17 +22,17 @@ public:
 	virtual EEquipmentGrade GetItemGrade_Implementation() const override;
 public:
 	UPROPERTY(VisibleAnywhere)
-	int32 itemID; //아이템 ID
+	int32 itemID;
 	UPROPERTY(VisibleAnywhere)
-	EEquipmentGrade equipmentGrade; //아이템 등급
+	EEquipmentGrade equipmentGrade;
 	UPROPERTY(VisibleAnywhere)
-	FString name; //이름
+	FString name;
 	UPROPERTY(VisibleAnywhere)
-	FString icon; //아이콘
+	FString icon;
 	UPROPERTY(VisibleAnywhere)
-	int32 maxCount; //최대 소지 갯수
+	int32 maxCount;
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	int32 amount; //가지고 있는 갯수
+	int32 amount;
 
 
 };

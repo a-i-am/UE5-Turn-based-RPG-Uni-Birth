@@ -7,9 +7,9 @@
 #include "Common/UBdefine.h"
 #include "UBPlayerWidgetComponent.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UNIBIRTH_API UUBPlayerWidgetComponent : public UWidgetComponent
 {

@@ -8,9 +8,9 @@
 #include "UI/Data/CharacterPortraitData.h"
 #include "UBCharacterPortrait.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCharacterPortrait : public UUserWidget
 {
@@ -21,7 +21,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	ECharacterType charactertype;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void ReApplyPortrait();
 

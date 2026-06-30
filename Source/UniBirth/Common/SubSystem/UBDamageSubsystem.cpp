@@ -11,10 +11,10 @@ UUBDamageSubsystem::UUBDamageSubsystem()
 {
 }
 
-// 상태이상확률
+
 bool UUBDamageSubsystem::CheckState(AUBCombatUnit* Unit)
 {
-	float ResistPercent = Unit->statsComp->currentStats.ResistRate; 
+	float ResistPercent = Unit->statsComp->currentStats.ResistRate;
 	float RandPercent = FMath::FRandRange(0.f, 1.f);
 
 	return RandPercent < ResistPercent;
@@ -24,7 +24,7 @@ bool UUBDamageSubsystem::CheckCritical(AUBCombatUnit* Unit)
 {
 	float CrtPercent = Unit->statsComp->currentStats.critRate;
 	float RandPercent = FMath::FRandRange(0.f, 1.f);
-	
+
 	return CrtPercent > RandPercent;
 }
 

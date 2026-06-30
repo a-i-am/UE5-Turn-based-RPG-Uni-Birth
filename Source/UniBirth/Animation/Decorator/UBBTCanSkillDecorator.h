@@ -6,14 +6,14 @@
 #include "BehaviorTree/BTDecorator.h"
 #include "UBBTCanSkillDecorator.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBBTCanSkillDecorator : public UBTDecorator
 {
 	GENERATED_BODY()
-	
+
 public:
 	UUBBTCanSkillDecorator();
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;

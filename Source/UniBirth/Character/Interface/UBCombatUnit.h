@@ -16,18 +16,18 @@ class UNIBIRTH_API AUBCombatUnit : public ACharacter
 
 public:
 
-	// Sets default values for this character's properties
+
 	AUBCombatUnit();
 	virtual void AttackHit();
-	//virtual void SpawnImPactFX();
+
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
-public:	
-	// Called every frame
+public:
+
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -50,7 +50,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AUBCombatUnit> CurrentTarget;
-	
+
 	UFUNCTION(BlueprintCallable)
 	AUBCombatUnit* GetCurrentUnit() const { return CurrentTarget; }
 
@@ -75,7 +75,7 @@ public:
 	UPROPERTY()
 	TObjectPtr<class UUBSkillManager> SkillManager;
 
-	//Skillkey찾는 함수
+
 	FCharacterSkill* FindSkillKey(FString keyName);
 	FCharacterSkill* FindSkillId(int32 skillId);
 
@@ -110,7 +110,7 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<class ABattleManager>  bm;
-	
+
 
 	UPROPERTY()
 	TObjectPtr<class UUBDamageSubsystem> damageSST;
@@ -122,7 +122,7 @@ public:
 
 	void HealMp(const int value);
 	bool IsStealthed();
-	
+
 
 	bool bIsDeath = false;
 	virtual void Counter(AUBCombatUnit* unit);
@@ -138,15 +138,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ActiveBuffEffect();
 
-	// Burn (화상)
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BuffEffect")
 	class UNiagaraComponent* BurnEffect;
 
-	// Stun (스턴)
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BuffEffect")
 	class UNiagaraComponent* StunEffect;
 
-	// Poison (중독)
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BuffEffect")
 	class UNiagaraComponent* PoisoningEffect;
 

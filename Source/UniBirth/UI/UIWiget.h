@@ -7,15 +7,15 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "UIWiget.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUIWiget : public UUserWidget
 {
 	GENERATED_BODY()
-  
-    
+
+
 public:
     virtual void NativeConstruct() override;
 
@@ -25,5 +25,5 @@ public:
     UFUNCTION(BlueprintCallable)
     void AtkBtnClick();
 
-  
+
 };

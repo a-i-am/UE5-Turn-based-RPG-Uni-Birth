@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "UBResetLocationNotifyState.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBResetLocationNotifyState : public UAnimNotifyState
 {

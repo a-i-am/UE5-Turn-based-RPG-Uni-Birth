@@ -6,14 +6,14 @@
 #include "UI/Main/UBMainWidget.h"
 #include "UBInventoryUI.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBInventoryUI : public UUBMainWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 	UFUNCTION()
 	void NativeConstruct() override;

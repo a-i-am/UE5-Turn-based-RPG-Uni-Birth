@@ -15,18 +15,18 @@
 #include "Components/BoxComponent.h"
 #include "UI/Combat/UBDamageFloat.h"
 #include "NiagaraComponent.h"
-// Sets default values
+
 AUBCombatUnit::AUBCombatUnit()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	statsComp = CreateDefaultSubobject<UUBStatsComponent>(TEXT("StatsComp"));
 	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComp"));
 	BuffComp = CreateDefaultSubobject<UUBBuffComponent>(TEXT("BuffComp"));
 	asComp = CreateDefaultSubobject<UActionSystemComponent>(TEXT("actioncomp"));
-	//CameraPivot = CreateDefaultSubobject<USceneComponent>(TEXT("CameraPivot"));
-	//CameraPivot->SetupAttachment(GetRootComponent());*/
-	//CameraPivot->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+
+
+
 	floatingDamageArea = CreateDefaultSubobject<UBoxComponent>(TEXT("floatingDamageArea"));
 	floatingDamageArea->SetupAttachment(GetRootComponent());
 	floatingDamageArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -45,14 +45,14 @@ AUBCombatUnit::AUBCombatUnit()
 	PoisoningEffect->SetAutoActivate(false);
 }
 
-// Called when the game starts or when spawned
+
 void AUBCombatUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	if(HealthComp)
 	HealthComp->Init(statsComp);
 
-	
+
 
 	SkillManager = GetGameInstance()->GetSubsystem<UUBSkillManager>();
 	if (SkillManager == nullptr) return;
@@ -71,10 +71,10 @@ void AUBCombatUnit::BeginPlay()
 	{
 		statsComp->InitStats(characterType);
 	}
-	
+
 }
 
-// Called every frame
+
 void AUBCombatUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -85,7 +85,7 @@ void AUBCombatUnit::AttackHit()
 
 }
 
-// Called to bind functionality to input
+
 void AUBCombatUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -126,7 +126,7 @@ void AUBCombatUnit::PlayCutscene(ULevelSequence* Sequence)
 		return;
 	}
 
-	
+
 	cachedSequenceActor = OutActor;
 	Player->OnFinished.AddDynamic(this, &AUBCombatUnit::OnSequenceFinished);
 
@@ -138,14 +138,14 @@ void AUBCombatUnit::OnSequenceFinished()
 	{
 		cachedSequenceActor->Destroy();
 		cachedSequenceActor = nullptr;
-		
+
 	}
 	OnCutSceneFinished.Broadcast();
 }
 
 void AUBCombatUnit::DeathCharacter()
 {
-	
+
 }
 
 
@@ -157,7 +157,7 @@ bool AUBCombatUnit::bIsDead()
 
 void AUBCombatUnit::HealMp(const int value)
 {
-	//HealthComp->UnitHealMp(this, value);
+
 	if (statsComp->currentStats.Mp > 10)
 	{
 		return;
@@ -182,7 +182,7 @@ void AUBCombatUnit::Counter(AUBCombatUnit* unit)
 
 void AUBCombatUnit::PrintDamage(int damage)
 {
-	
+
 	const FVector Extent = floatingDamageArea->GetScaledBoxExtent();
 	const FVector Origin = floatingDamageArea->GetComponentLocation();
 
@@ -236,7 +236,7 @@ void AUBCombatUnit::ActiveBuffEffect()
 
 	const TArray<EUnitState>& States = statsComp->currentStats.CurrState;
 
-	// Burn
+
 	if (BurnEffect)
 	{
 		if (States.Contains(EUnitState::Burn))
@@ -250,7 +250,7 @@ void AUBCombatUnit::ActiveBuffEffect()
 		}
 	}
 
-	// Stun
+
 	if (StunEffect)
 	{
 		if (States.Contains(EUnitState::Stun))
@@ -264,7 +264,7 @@ void AUBCombatUnit::ActiveBuffEffect()
 		}
 	}
 
-	// Poison
+
 	if (PoisoningEffect)
 	{
 		if (States.Contains(EUnitState::Poisoning))

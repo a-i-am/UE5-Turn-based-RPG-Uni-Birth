@@ -8,14 +8,14 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "UBAnimInstance.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void PlayMontageGeneric(FGameplayTag ActionTag);

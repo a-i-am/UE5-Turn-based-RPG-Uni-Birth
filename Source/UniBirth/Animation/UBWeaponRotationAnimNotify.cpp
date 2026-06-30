@@ -9,6 +9,6 @@ void UUBWeaponRotationAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnim
 	if (player)
 	{
 		player->TOggleWeaponRotator();
-		
+
 	}
 }

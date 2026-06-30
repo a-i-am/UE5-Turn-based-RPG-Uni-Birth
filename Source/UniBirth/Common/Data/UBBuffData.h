@@ -37,7 +37,7 @@ struct FSkillBuffData : public FTableRowBase
 	int32 TurnDurCount;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TArray<EBuffStatType> BuffStats; // 여러 스탯 타입을 담는 배열
+	TArray<EBuffStatType> BuffStats;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	EStatOperator StatOperator;
@@ -56,7 +56,7 @@ struct FSkillBuffData : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	int32 StackCount;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	EBuffType BuffType;
 };
@@ -75,10 +75,10 @@ struct FComboBuffData : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	EComboType Combo;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FString Description;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FString DelCase;
 

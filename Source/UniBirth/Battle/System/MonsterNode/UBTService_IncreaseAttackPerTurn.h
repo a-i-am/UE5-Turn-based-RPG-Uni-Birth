@@ -6,9 +6,9 @@
 #include "BehaviorTree/BTService.h"
 #include "UBTService_IncreaseAttackPerTurn.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBTService_IncreaseAttackPerTurn : public UBTService
 {

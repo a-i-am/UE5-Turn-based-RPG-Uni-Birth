@@ -18,8 +18,8 @@ void UUBCharacterMovementAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshCom
 void UUBCharacterMovementAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
 	if (character == nullptr) return;
-	
-	// 실제 좌표 이동하는 로직
+
+
 	const FVector CurrPelvisWS = MeshComp->GetSocketLocation(PelvisBoneName);
 	character->MoveTowardTargetFromSocket(CurrPelvisWS, character->CurrentTarget, FrameDeltaTime);
 }

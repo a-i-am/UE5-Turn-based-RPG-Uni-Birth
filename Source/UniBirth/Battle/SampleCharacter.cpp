@@ -21,14 +21,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Common/SubSystem/UBDamageSubsystem.h"
-// Sets default values
+
 ASampleCharacter::ASampleCharacter()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
+
 void ASampleCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -43,14 +43,14 @@ void ASampleCharacter::BeginPlay()
 	InitialMeshRelativeLocation = GetMesh()->GetRelativeLocation();
 	InitialMeshRelativeRotation = GetMesh()->GetRelativeRotation();
 
-	
-	//델리게이트 바인딩
+
+
 	bm->OnHitAciton.AddUObject(this, &ASampleCharacter::StartParryingAction);
 	bm->OnMonsterAttackResult.AddUObject(this, &ASampleCharacter::HandleMonsterAttackResolved);
 	if (asComp == nullptr) return;
 	OriginalLocation = GetActorLocation();
 	currentState = EActionState::idle;
-	
+
 }
 
 
@@ -58,7 +58,7 @@ void ASampleCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+
 }
 
 bool ASampleCharacter::operator<(const ASampleCharacter& Other) const
@@ -92,7 +92,7 @@ void ASampleCharacter::Attack(AUBCombatUnit* unit)
 
 }
 
-//스킬 시작전 체크하는 로직 ex) target , Mp 등등 
+
 void ASampleCharacter::ActiveSkill(AUBCombatUnit* unit)
 {
 	CurrentTarget = unit;
@@ -101,7 +101,7 @@ void ASampleCharacter::ActiveSkill(AUBCombatUnit* unit)
 	CurrentActionTag = UBGameplayTags::Action_Attack_Skill;
 
 	gameInstance->SkillManager->RequestSkillUse(this, TEXT("SKILL_ACTIVE"), CurrentTarget);
-	
+
 	asComp->OnActionSelected(CurrentActionTag);
 }
 
@@ -114,20 +114,20 @@ void ASampleCharacter::UltiMateKSill(AUBCombatUnit* unit)
 }
 
 void ASampleCharacter::Defence()
-{ 
+{
 	CurrentActionTag = UBGameplayTags::Action_Defence;
 	currentState = EActionState::Guard;
 	bm->SetGlobalTimeReset();
 	ResultGuard(EResultType::Success);
 }
 
-void ASampleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) 
+void ASampleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-//내가 때린 대상
+
 void ASampleCharacter::AttackHit()
-{	
+{
 	const FCharacterActionFXOverride* FX = nullptr;
 	if (this->FXProfile)
 	{
@@ -138,16 +138,16 @@ void ASampleCharacter::AttackHit()
 		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, TEXT("NULL"));
 		return;
 	}
-		
-	//일반공격 데미지처리
+
+
 	if (CurrentActionTag == UBGameplayTags::Action_Attack_Normal || CurrentActionTag == UBGameplayTags::Action_Counter)
 	{
-		
-		//평타데미지에 대한 처리 
+
+
 		int32 FinalDamage = damageSST->CalculateNormalAttackDamage(this, CurrentTarget);
 		HealthComp->ApplyDamage(FinalDamage, CurrentTarget, FX, FX->ImpactScale, FX->ImpactRotator, NormalAttackHitCount);
 	}
-	// 궁극기 공격 데미지 처리 
+
 	else
 	{
 		FCharacterSkill* Skills = gameInstance->SkillManager->RequestSkillUse(this, TEXT("SKILL_ULTIMATE"), CurrentTarget);
@@ -196,14 +196,14 @@ void ASampleCharacter::RotateToTarget(AUBCombatUnit* Unit)
 void ASampleCharacter::OnActionFinished()
 {
 	if (!asComp || !bm)return;
-	//공격 전으로 돌리기
+
 	if (bRestoreRotationAfterAttack)
 	{
 		GetMesh()->SetRelativeRotation(SavedRotBeforeAttack);
 		bRestoreRotationAfterAttack = false;
 	}
 	bm->HandleGameEnd();
-	// 공격일때만 밑에 로직 실행
+
 	if (
 		CurrentActionTag != UBGameplayTags::Action_Attack_Normal &&
 		CurrentActionTag != UBGameplayTags::Action_Attack_Skill &&
@@ -265,7 +265,7 @@ void ASampleCharacter::ResultParrying(EResultType Result)
 	}
 	else  if (result == EResultType::Success)
 	{
-		//성공
+
 		CurrentActionTag = UBGameplayTags::Action_Parry;
 		asComp->OnActionSelected(CurrentActionTag);
 	}
@@ -285,7 +285,7 @@ void ASampleCharacter::ResultDodge(EResultType Result)
 	}
 }
 
-//반격
+
 void ASampleCharacter::Counter(AUBCombatUnit* target)
 {
 	CurrentActionTag = UBGameplayTags::Action_Counter;
@@ -313,15 +313,15 @@ void ASampleCharacter::MoveTowardTargetFromSocket(
 	AUBCombatUnit* Target,
 	float DeltaTime)
 {
-	float MoveSpeed = 2000.f; // 원하는 값
+	float MoveSpeed = 2000.f;
 	InitialMeshRelativeLocation.Z = -90;
 	if (!Target) return;
 
 		FVector ToTarget = Target->GetActorLocation() - GetActorLocation();
 		ToTarget.Z = 0.f;
 		const float AttackArriveSq = 50.f * 50.f;
-	
-		// 도착  복귀로 전환
+
+
 		if (ToTarget.SizeSquared() <= AttackArriveSq)
 		{
 			return;
@@ -346,7 +346,7 @@ void ASampleCharacter::DeathCharacter()
 
 void ASampleCharacter::CharacterResetLocation(const FVector& CurrentSocketWS,float DeltaTime)
 {
-	float MoveSpeed = 2000.f; // 원하는 값
+	float MoveSpeed = 2000.f;
 	FVector ToOrigin = OriginalLocation - GetActorLocation();
 	InitialMeshRelativeLocation.Z = -90;
 	ToOrigin.Z = 0.f;
@@ -363,7 +363,7 @@ void ASampleCharacter::CharacterResetLocation(const FVector& CurrentSocketWS,flo
 		Move->MoveUpdatedComponent(Dir * MoveSpeed * DeltaTime, GetActorRotation(), false);
 	}
 
-			
+
 }
 
 

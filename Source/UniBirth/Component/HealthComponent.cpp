@@ -25,13 +25,13 @@ void UHealthComponent::ApplyDamage(int32 DamageAmount, AUBCombatUnit* target,
 {
 	if (!target || hitCount <= 0)
 		return;
-	//히트당 데미지 계산
+
 	int32 DamagePerHit = DamageAmount / hitCount;
 
-	//데미지 텍스트 출력
+
 	target->PrintDamage(DamagePerHit);
-	
-	 // 쉴드 @TODO
+
+
 	int32& Shield = target->statsComp->currentStats.shield;
 	if (Shield > 0)
 	{
@@ -49,7 +49,7 @@ void UHealthComponent::ApplyDamage(int32 DamageAmount, AUBCombatUnit* target,
 	}
 
  	target->statsComp->currentStats.Hp -= DamagePerHit;
-	
+
 	if (ImpactFX)
 	{
 		if (ImpactFX->Particle)
@@ -82,7 +82,7 @@ void UHealthComponent::SpawnParticle(AUBCombatUnit* target, const FCharacterActi
 	(UGameplayStatics::SpawnEmitterAtLocation(
 		GetWorld(),
 		ImpactFX->Particle,
-		target->GetActorLocation(),	
+		target->GetActorLocation(),
 		ImpactRotator,
 		ImpactScale));
 }
@@ -105,7 +105,7 @@ void UHealthComponent::Death(AUBCombatUnit* unit)
 {
 	unit->DeathCharacter();
 }
-//가드 이펙트 소폰
+
 void UHealthComponent::SpawnGuardParticle(AUBCombatUnit* unit)
 {
 	if (!unit || !GuardParticle) return;

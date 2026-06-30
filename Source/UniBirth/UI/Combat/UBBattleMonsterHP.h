@@ -15,7 +15,7 @@ class UNIBIRTH_API UUBBattleMonsterHP : public UUserWidget
 {
 	GENERATED_BODY()
 protected:
-	virtual void NativeConstruct() override;// 위젯이 생성될 때 초기화하는 함수
+	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 public:
@@ -53,7 +53,7 @@ public:
 	int32 maxHP = 0;
 	int32 maxMP = 0;
 	int32 maxShield = 1700;
-	
+
 	UPROPERTY()
 	TObjectPtr<class ABattleManager> BM;
 };

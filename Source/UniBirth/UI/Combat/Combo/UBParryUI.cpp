@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UI/Combat/Combo/UBParryUI.h"
 #include "Components/CanvasPanelSlot.h"
@@ -70,7 +70,7 @@ void UUBParryUI::StartParry(bool AllDefence)
 
 void UUBParryUI::SetComboBuffData(bool allDefence)
 {
-	if (allDefence) // 전체 공격 = 가장 높은 패리 스탯
+	if (allDefence)
 	{
 		for (auto iter : BM->GetAllPlayer())
 		{
@@ -82,10 +82,10 @@ void UUBParryUI::SetComboBuffData(bool allDefence)
 			}
 		}
 	}
-	else // 일반공격 = 몬스터의 타겟 플레이어가 가진 패리 스탯
+	else
 	{
 		UUBStatsComponent* StatComp = GetCurrPlayerStatComp();
-			
+
 		if (StatComp->currentStats.parryPoint > 0)
 		{
 			currParryPointWidth = StatComp->currentStats.parryPoint;
@@ -106,7 +106,7 @@ UUBStatsComponent* UUBParryUI::GetCurrPlayerStatComp()
 			return nullptr;
 		}
 	}
-	
+
 	UUBStatsComponent* StatComp = CurrMonster->CurrentTarget->statsComp.Get();
 
 	return StatComp;
@@ -115,7 +115,7 @@ UUBStatsComponent* UUBParryUI::GetCurrPlayerStatComp()
 void UUBParryUI::ApplyParryPointWidthData(float CurrPointWidth)
 {
 	UCanvasPanelSlot* ArrowCanvasSlot = Cast<UCanvasPanelSlot>(parryPointImage->Slot);
-	
+
 	if (ArrowCanvasSlot)
 	{
 		FVector2D CurrPointSize = ArrowCanvasSlot->GetSize();
@@ -129,11 +129,11 @@ void UUBParryUI::InitTimingAreas()
 {
  	if (!parringOverlaySlotCache || !timingAreaImage)
 	{
-		return; 
+		return;
 	}
 
 	AUBCombatUnit* CurrCharacter = BM->GetCurrentCharacter();
-	
+
 	if (!CurrCharacter)
 	{
 		return;
@@ -145,18 +145,18 @@ void UUBParryUI::InitTimingAreas()
 
 	FParryStruct* ParryData = GetParryZoneData(TargetGrade);
 
-	if (!ParryData) 
+	if (!ParryData)
 	{
-		return; 
+		return;
 	}
-	
+
 	int32 SpawnedPosCount = 100;
 	float OverlaySizeX = parringOverlaySlotCache->GetSize().X;
 	float ZoneRatio = ParryData->ZoneWidth;
 
 	parryAreaWidth = OverlaySizeX * (ZoneRatio / SpawnedPosCount);
 	float SizeLimitRatio = 31.0f;
-	
+
 	UCanvasPanelSlot* TimingAreaCanvasSlot = Cast<UCanvasPanelSlot>(timingAreaImage->Slot);
 
 	if (TimingAreaCanvasSlot)
@@ -165,17 +165,17 @@ void UUBParryUI::InitTimingAreas()
 	}
 
 	float SizeLimitWidth = OverlaySizeX * (SizeLimitRatio / SpawnedPosCount);
-	
+
 	if (parryAreaWidth >= SizeLimitWidth || parryAreaWidth > OverlaySizeX)
 	{
-	
+
 		return;
 	}
 
-	// 패링 오버레이 영역 내에서 나눠지는 칸을 배열에 등록
+
 	int32 SegmentedCount = FMath::FloorToInt(OverlaySizeX / parryAreaWidth);
 
-	timingAreas.Empty(SegmentedCount); // 비우는 동시에 메모리 크기도 확보
+	timingAreas.Empty(SegmentedCount);
 
 	for (int32 i = 0; i < SegmentedCount; ++i)
 	{
@@ -186,10 +186,10 @@ void UUBParryUI::InitTimingAreas()
 
 void UUBParryUI::ApplyRandomizedPosition()
 {
-	// @TODO: Clamp, 랜덤 로직 중복되는 건 함수로 빼기 
+
 	if (timingAreas.Num() > 0)
 	{
-		// 랜덤으로 섞인 좌표 중 첫 좌표를 가져오기
+
 		int32 RandIndex = FMath::RandRange(0, timingAreas.Num() - 1);
 		float PickedX = timingAreas[RandIndex];
 		if (!parringOverlay && !parringOverlaySlotCache)
@@ -222,12 +222,12 @@ void UUBParryUI::OnTimeOut()
 	BM->SetReactionResult(EResultType::Fail);
 	BM->SetGlobalTimeReset();
 	CloseWidget();
-	
+
 }
 
 FParryStruct* UUBParryUI::GetParryZoneData(EParryzoneGrade grade)
 {
-	if (!parryDataTable) 
+	if (!parryDataTable)
 	{
 		return nullptr;
 	}
@@ -247,19 +247,19 @@ FParryStruct* UUBParryUI::GetParryZoneData(EParryzoneGrade grade)
 
 void UUBParryUI::MoveArrowTransform(float InDeltaTime)
 {
-	// @TODO : 버프 데이터에서 GetParryPointSpeed();
-	//FParryStruct* ParryData = GetParryPointSpeed();
-	/*if (!ParryData)
-	{
-		return;
-	}*/
+
+
+
+
+
+
 	if (!parringOverlay || !parringOverlaySlotCache)
 	{
 		return;
 	}
-	if (!parryPointImage || bCheckParrying) 
+	if (!parryPointImage || bCheckParrying)
 	{
-		return; 
+		return;
 	}
 
 	UCanvasPanelSlot* ArrowCanvasSlot = Cast<UCanvasPanelSlot>(parryPointImage->Slot);
@@ -267,7 +267,7 @@ void UUBParryUI::MoveArrowTransform(float InDeltaTime)
 	float OverlaySizeX = parringOverlaySlotCache->GetSize().X;
 	float EndPosX = OverlaySizeX - parryPointImageSizeX;
 
-	// 속도 = 시간 / 거리
+
 	float Duration = 1.5f;
 	if (parryPointSpeed < 0.0f)
 	{
@@ -281,11 +281,11 @@ void UUBParryUI::MoveArrowTransform(float InDeltaTime)
 	arrowPosX += parryPointSpeed * InDeltaTime;
 	ArrowCanvasSlot->SetPosition(FVector2D(arrowPosX, ArrowCanvasSlot->GetPosition().Y));
 
-	//화살표가 오른쪽 끝에 도달했을 때의 좌표는 전체 길이에서 자기 자신의 길이를 뺀 지점
-	// 왼쪽 앵커 기준
+
+
 	if (arrowPosX >= EndPosX || arrowPosX <= 0.0f)
 	{
-		// 화살표가 전체 이동가능영역을 넘어가면 시작점 또는 끝점으로 보정
+
 		arrowPosX = FMath::Clamp(arrowPosX, 0.0f, EndPosX);
 		parryPointSpeed *= -1.0f;
 	}
@@ -293,17 +293,17 @@ void UUBParryUI::MoveArrowTransform(float InDeltaTime)
 
 void UUBParryUI::CheckParry()
 {
-	//if (!parringArrowSlotCache || !parringTimingAreaSlotCache) { return false; }
+
 	bCheckParrying = true;
 
-	//좌상단기준 AABBparryPointImage->GetRenderTransform();
+
 	UCanvasPanelSlot* TimingCanvasSlot = Cast< UCanvasPanelSlot>(timingAreaImage->Slot);
 	UCanvasPanelSlot* ArrowCanvasSlot = Cast< UCanvasPanelSlot>(parryPointImage->Slot);
 	if (!TimingCanvasSlot || !ArrowCanvasSlot)
 	{
 		return;
 	}
-	
+
 	float timingAreaPosX = TimingCanvasSlot->GetPosition().X;
 	float timingAreaSizeX = TimingCanvasSlot->GetSize().X;
 
@@ -328,7 +328,7 @@ EParryzoneGrade UUBParryUI::ConvertTypeToParryGrade(ECharacterType CharType)
 	case ECharacterType::CT_Elite:
 		return EParryzoneGrade::Elite;
 	case ECharacterType::CT_Common:
-	default: // 나머지는 전부 기본(Base) 등급으로 처리
+	default:
 		return EParryzoneGrade::Base;
 	}
 }

@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Common/System/UBGameInstance.h"
@@ -14,7 +14,7 @@ void UUBGameInstance::Init()
 
 	SkillManager = NewObject<UUBSkillManager>(this);
 
-	//FSlateApplication::Get().OnApplicationMousePreInputButtonDownListener().AddUObject(this, &UUBGameInstance::HandlePreMouseButtonDown);
+
 
 	if (UUBSaveGame* LoadedGame = Cast<UUBSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MainData"), 0)))
 	{
@@ -36,7 +36,7 @@ TArray<int32> UUBGameInstance::GetReward(int32 stage)
 
 	TMap<int32, TArray<FRewardStruct>> RandomCaseMap;
 
-	// 1️DataTable 순회
+
 	static const FString Context(TEXT("RewardContext"));
 	TArray<FRewardStruct*> Rows;
 	RewardData->GetAllRows(Context, Rows);
@@ -48,17 +48,17 @@ TArray<int32> UUBGameInstance::GetReward(int32 stage)
 
 		if (Row->RandomCase == 0)
 		{
-			// 고정 보상
+
 			ResultItemIDs.Add(Row->ItemID);
 		}
 		else
 		{
-			// 랜덤 보상 후보
+
 			RandomCaseMap.FindOrAdd(Row->RandomCase).Add(*Row);
 		}
 	}
 
-	// 2️ RandomCase별 가중치 랜덤
+
 	for (auto& Pair : RandomCaseMap)
 	{
 		const TArray<FRewardStruct>& Rewards = Pair.Value;
@@ -93,7 +93,7 @@ TArray<int32> UUBGameInstance::GetReward(int32 stage)
 void UUBGameInstance::GetSkillsForCharacter(ECharacterType CharacterID, TArray<FCharacterSkill>& OutSkills,
 	TArray<FCharacterSkill>&OutPassvie)
 {
-	//스킬 비우고
+
 	OutSkills.Empty();
 	OutPassvie.Empty();
 	TArray<FCharacterSkill*> Rows;
@@ -161,11 +161,11 @@ FUBStats UUBGameInstance::GetStatData(ECharacterType characterType)
 	{
 		return empty;
 	}
-	
+
 	const UEnum* EnumPtr = StaticEnum<ECharacterType>();
 	FString EnumString = EnumPtr->GetNameStringByValue((int64)characterType);
 	FName RowName = FName(*EnumString);
-	
+
 	switch (characterType)
 	{
 	case ECharacterType::CT_Uni:

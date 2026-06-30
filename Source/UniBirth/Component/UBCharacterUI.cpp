@@ -1,4 +1,4 @@
-// UBCharacterUIComponent.cpp
+
 
 #include "UBCharacterUI.h"
 #include "Component/UBPlayerWidgetComponent.h"
@@ -14,7 +14,7 @@
 #include "Battle/System/UBPlayerController.h"
 #include "Character/Data/UBCharacterSkillData.h"
 #include "Battle/System/UBGameStateBase.h"
-// Sets default values for this component's properties
+
 AUBCharacterUI::AUBCharacterUI()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -39,7 +39,7 @@ AUBCharacterUI::AUBCharacterUI()
 	TargetSelectWidget = CreateDefaultSubobject<UUBPlayerWidgetComponent>(TEXT("TargetSelectWidget"));
 	TargetSelectWidget->uiType = EBattleUIType::BU_Attack;
 	TargetSelectWidget->SetupAttachment(RootComponent);
-	
+
 }
 
 void AUBCharacterUI::Tick(float DeltaTime)
@@ -47,10 +47,10 @@ void AUBCharacterUI::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (BM)
 	{
-		
+
 	}
 
-	
+
 	if (OwnerPlayer) {
 		UIPosition = OwnerPlayer->UIPosition;
 	}
@@ -64,7 +64,7 @@ void AUBCharacterUI::Tick(float DeltaTime)
 	}
 
 }
- 
+
 void AUBCharacterUI::BeginPlay()
 {
 	Super::BeginPlay();
@@ -76,7 +76,7 @@ void AUBCharacterUI::BeginPlay()
 	GS->OnGameStart.AddUObject(this, &AUBCharacterUI::GameStartWiget);
 	ABattleManager* bm = gm->GetBattleManager();
 	if (bm == nullptr) return;
-	//델리게이트 바인딩
+
 	bm->OnMonsterAttackStarted.AddUObject(this, &AUBCharacterUI::HandleMonsterAttackStarted);
 	bm->OnUIHide.AddUObject(this, &AUBCharacterUI::HandleHideWiget);
 	bm->OnTimeDelayEnded.AddUObject(this, &AUBCharacterUI::HideAllWidget);
@@ -100,25 +100,25 @@ void AUBCharacterUI::BeginPlay()
 			TargetSelectWidget = widget;
 			break;
 		}
-		//@TODO
+
 		if (!GetWorld()) return;
 
-		
+
 		if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 		{
 			AUBBattleHUD* CachedBattleHUD = Cast<AUBBattleHUD>(PC->GetHUD());
 		}
 	}
-	
-	ChangeOwner(Cast<AUBPlayer>(GetWorld()->GetAuthGameMode<ABattleGameMode>()->GetBattleManager()->GetCurrentCharacter()));
-	//ShowWidgetComp(AttackWidget);
 
-	//AttackWidget = BattleHUD->AttackWidget;
-	//ItemWidget = BattleHUD->ItemWidget;
-	//SkillSelectWidget = BattleHUD->SkillSelectWidget;
-	//DefenceWidget = BattleHUD->DefenceWidget;
-	// 시작은 전부 숨김
-	//HideAllWidget();
+	ChangeOwner(Cast<AUBPlayer>(GetWorld()->GetAuthGameMode<ABattleGameMode>()->GetBattleManager()->GetCurrentCharacter()));
+
+
+
+
+
+
+
+
 }
 
 void AUBCharacterUI::SelectButton(EBattleUIType UIType)
@@ -157,11 +157,11 @@ void AUBCharacterUI::HideWidgetComp(UUBPlayerWidgetComponent* WidgetComp)
 	{
 		return;
 	}
-	// 1) 컴포넌트 레벨에서 숨기기 (렌더링 끄기)
-	WidgetComp->SetVisibility(false);        // 언리얼 컴포넌트 visibility (true/false)
-	WidgetComp->SetHiddenInGame(true);      // 게임 중 숨기기
+
+	WidgetComp->SetVisibility(false);
+	WidgetComp->SetHiddenInGame(true);
 	WidgetComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	// 2) 내부 UUserWidget 레벨에서 숨기기 (슬레이트 레벨)
+
 	if (UUserWidget* UW = WidgetComp->GetUserWidgetObject())
 	{
 		UW->SetVisibility(ESlateVisibility::Collapsed);
@@ -174,7 +174,7 @@ void AUBCharacterUI::HideWidgetComp(UUBPlayerWidgetComponent* WidgetComp)
 					HUD->CurrentWidget = nullptr;
 				}
 			}
-			
+
 		}
 	}
 }
@@ -183,12 +183,12 @@ void AUBCharacterUI::ShowWidgetComp(UUBPlayerWidgetComponent* WidgetComp)
 {
 	if (!WidgetComp) return;
 
-	// 1) 컴포넌트 레벨에서 보이기
+
 	WidgetComp->SetVisibility(true);
 	WidgetComp->SetHiddenInGame(false);
 	WidgetComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
-	// 2) 내부 UUserWidget 레벨에서 보이기
+
 	if (UUserWidget* UW = WidgetComp->GetUserWidgetObject())
 	{
 		UW->SetVisibility(ESlateVisibility::Visible);
@@ -230,7 +230,7 @@ void AUBCharacterUI::ChangeOwner(AUBPlayer* NewOwner)
 
 	if (OwnerPlayer)
 	{
-		UIPosition = OwnerPlayer->UIPosition;		
+		UIPosition = OwnerPlayer->UIPosition;
 		if (AUBPlayerController* PC = Cast<AUBPlayerController>(GetWorld()->GetFirstPlayerController()))
 		{
 			PC->OnPlayerTurnStarted(OwnerPlayer);
@@ -242,17 +242,17 @@ void AUBCharacterUI::ChangeOwner(AUBPlayer* NewOwner)
 }
 void AUBCharacterUI::HandleMonsterAttackStarted(AUBCombatUnit* Target, FCharacterSkill* skill)
 {
-	//단체공격이라면.
+
 
 	if (skill->target_scope == 3)
 	{
 		bFollowUIPosition = false;
-	
+
 		if (AUBBattleHUD* HUD =Cast<AUBBattleHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
 		{
 			HUD->ShowScreenGuardUI();
 
-			//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.05f);
+
 		}
 		return;
 	}
@@ -260,7 +260,7 @@ void AUBCharacterUI::HandleMonsterAttackStarted(AUBCombatUnit* Target, FCharacte
 	if (OwnerPlayer != Target)
 	{
 		ChangeOwner(Cast<AUBPlayer>(Target));
-		
+
 	}
 
 	HideAllWidget();

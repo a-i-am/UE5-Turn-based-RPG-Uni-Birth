@@ -10,8 +10,8 @@
 UENUM(BlueprintType)
 enum class EPassiveTrigger : uint8
 {
-	TurnStart,      // 자기 턴 시작
-	AfterAction     // 스킬/공격 사용 후
+	TurnStart,
+	AfterAction
 };
 
 UCLASS(Blueprintable)
@@ -30,7 +30,7 @@ public:
 	void TestRequestSkillUse(class AUBCombatUnit* user, const FString& Key, AUBCombatUnit* Target);
 
 	FCharacterSkill* RequestSkillUse(class AUBCombatUnit* user, const FString& Key, AUBCombatUnit* Target);
-	
+
 
 	bool AtvSkill = true;
 
@@ -45,7 +45,7 @@ public:
 
 	void OnTurnStart(AUBCombatUnit* Unit);
 
-	//bool HasBuff(AUBCombatUnit* Unit, EEffectType Type);
+
 
 	UPROPERTY()
 	TObjectPtr<class UUBDamageSubsystem> damageSST;

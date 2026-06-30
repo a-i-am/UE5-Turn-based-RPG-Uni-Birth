@@ -1,4 +1,4 @@
-﻿#include "UI/Combat/Combo/UBTimeProgressWidget.h"
+#include "UI/Combat/Combo/UBTimeProgressWidget.h"
 #include "Components/Image.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
@@ -39,7 +39,7 @@ void UUBTimeProgressWidget::NativeTick(const FGeometry& MyGeometry, float InDelt
 
 		if (DynMat)
 		{
-			// 현재 비율 계산 (0.0 ~ 1.0)
+
 			float PercentValue = currentTime / maxTime;
 
 			DynMat->SetScalarParameterValue(FName("Percent"), PercentValue);

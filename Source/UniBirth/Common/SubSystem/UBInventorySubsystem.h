@@ -43,9 +43,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	int32 DroneID = -1;
 };
-/**
- * 
- */
+
+
+
 
 DECLARE_MULTICAST_DELEGATE(FOnInventoryChanged);
 

@@ -14,7 +14,7 @@ namespace UBGameplayTags
     UE_DEFINE_GAMEPLAY_TAG(Action_Death, "Action.Death");
     UE_DEFINE_GAMEPLAY_TAG(Action_StandUp, "Action.StandUp");
     UE_DEFINE_GAMEPLAY_TAG(Action_Defence, "Action.Defence");
-  
+
 
     UE_DEFINE_GAMEPLAY_TAG(Action_Monster_AttackA, "Action.Monster.AttackA");
     UE_DEFINE_GAMEPLAY_TAG(Action_Monster_AttackB, "Action.Monster.AttackB");

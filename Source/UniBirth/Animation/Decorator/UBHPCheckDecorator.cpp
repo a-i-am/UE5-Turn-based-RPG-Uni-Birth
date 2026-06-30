@@ -24,7 +24,7 @@ bool UUBHPCheckDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& Own
 	float CurrentHP = Monster->statsComp->currentStats.Hp;
 	float MaxHp = Monster->statsComp->currentStats.MaxHP;
 
-	// 몬스터가 특정 페이즈에 진입했을 때 모드 체크(왕의 폭주)
+
 	bool bConditionMet = CurrentHP <= MaxHp * RequiredHp;
 
 	if (bConditionMet)
@@ -32,7 +32,7 @@ bool UUBHPCheckDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& Own
 		if (UGameInstance* GI = Monster->GetGameInstance())
 		{
 			UUBSkillManager* SkillManger = GI->GetSubsystem<UUBSkillManager>();
-			
+
 			if (SkillManger)
 			{
 				SkillManger->CheckPassive(Monster);
@@ -75,7 +75,7 @@ bool UUBCheckStatsDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& 
 	AUBBaseMonster* Monster = Cast<AUBBaseMonster>(AI->GetPawn());
 	if (!Monster || !Monster->statsComp) return false;
 
-	//@TODO
+
 	return false;
 }
 

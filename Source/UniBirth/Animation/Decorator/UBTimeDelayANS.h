@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "UBTimeDelayANS.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBTimeDelayANS : public UAnimNotifyState
 {

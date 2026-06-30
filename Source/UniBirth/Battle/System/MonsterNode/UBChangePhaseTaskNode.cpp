@@ -11,7 +11,7 @@
 UUBChangePhaseTaskNode::UUBChangePhaseTaskNode()
 {
 	NodeName = "TreeChange Task";
-}	
+}
 
 EBTNodeResult::Type UUBChangePhaseTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -20,28 +20,28 @@ EBTNodeResult::Type UUBChangePhaseTaskNode::ExecuteTask(UBehaviorTreeComponent& 
 
 	AUBBaseMonster* Monster = Cast<AUBBaseMonster>(AI->GetPawn());
 	if (!Monster) return EBTNodeResult::Succeeded;
-	// 쉴드안깨짐 리턴
+
 	if (Monster->bIsPlay == false)
 	{
 		return EBTNodeResult::Failed;
 	}
-	//카메라 캐시
+
 	AUBPlayerController* PC = Cast<AUBPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (PC)
 	{
 		CachedViewTarget = PC->GetViewTarget();
-	}                
-	//안전하게 바인딩
+	}
+
 	Monster->OnCutSceneFinished.RemoveAll(this);
 	Monster->OnCutSceneFinished.AddUObject(
 		this,
 		&UUBChangePhaseTaskNode::HandleCutsceneFinished,
 		&OwnerComp
 	);
-	
-	
+
+
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, TEXT("CALL"));
-	//쉴드 깨졌으면 
+
 	AI->GetBrainComponent()->PauseLogic(TEXT("PhaseCutscene"));
 
 	AI->SetCheckHandle();
@@ -59,7 +59,7 @@ EBTNodeResult::Type UUBChangePhaseTaskNode::ExecuteTask(UBehaviorTreeComponent& 
 
 void UUBChangePhaseTaskNode::HandleCutsceneFinished(UBehaviorTreeComponent* OwnerComp)
 {
-	//비동기 Task
+
 	FinishLatentTask(*OwnerComp, EBTNodeResult::Failed);
 	AUBAIController* AI = Cast<AUBAIController>(OwnerComp->GetAIOwner());
 	if (AI)

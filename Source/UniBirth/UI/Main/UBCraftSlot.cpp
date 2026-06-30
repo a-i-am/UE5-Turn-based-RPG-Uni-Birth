@@ -12,7 +12,7 @@
 #include "UI/Main/UBCraftUI.h"
 
 void UUBCraftSlot::InitSlot() {
-	//인벤토리에서 인덱스에 있는 아이템 불러와서 아이콘 등록하기
+
 	if (item == nullptr)
 		return;
 	UTexture2D* icon = IUBItem::Execute_GetIcon(item.GetObject());
@@ -41,7 +41,7 @@ bool UUBCraftSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEven
 		{
 			return false;
 		}
-		//등급, 아이템 갯수 확인
+
 		if (!craftUI->CheckItem(Operation->index)) {
 			return false;
 		}

@@ -10,9 +10,9 @@
 #include "Common/SubSystem/UBSkillManager.h"
 #include "UBGameInstance.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBGameInstance : public UGameInstance
 {
@@ -29,13 +29,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* SkillData;
-	
+
 	UPROPERTY(EditAnywhere)
 	UDataTable* ComboBuffData;
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* SkillBuffData;
-	
+
 	UPROPERTY(EditAnywhere)
 	UDataTable* StatData;
 
@@ -55,7 +55,7 @@ public:
 	FConsumableStruct* GetConsumableData(int32 ID);
 
 	FMaterialStruct* GetMaterialData(int32 ID);
-	
+
 	UFUNCTION(BlueprintCallable)
 	FUBStats GetStatData(ECharacterType characterType);
 
@@ -68,7 +68,7 @@ public:
 
 	UFUNCTION()
 	void HandlePreMouseButtonDown(const FPointerEvent& MouseEvent);
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CurrentStage;
 

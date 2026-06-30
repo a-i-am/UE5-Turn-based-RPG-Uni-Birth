@@ -19,7 +19,7 @@ void UUBTService_IncreaseAttackPerTurn::TickNode(UBehaviorTreeComponent& OwnerCo
     AUBCombatUnit* Unit = Cast<AUBCombatUnit>(OwnerComp.GetAIOwner()->GetPawn());
     if (Unit && Unit->statsComp)
     {
-        Unit->statsComp->currentStats.Attack *= 1.1f;  // 10% Áõ°¡
+        Unit->statsComp->currentStats.Attack *= 1.1f;
 
         GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow,
             FString::Printf(TEXT("Attack +10%%: %.1f"), Unit->statsComp->currentStats.Attack));

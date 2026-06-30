@@ -9,7 +9,7 @@ USTRUCT(BlueprintType)
 struct FComboStatusInfo
 {
 	GENERATED_BODY()
-	
+
 	EBuffStatType statType;
 	EStatOperator op;
 	float value;

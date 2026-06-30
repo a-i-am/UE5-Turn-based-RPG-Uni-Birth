@@ -37,7 +37,7 @@ bool UUBCraftUI::CheckItem(int index)
 	if (tempitem ==nullptr) {
 		return false;
 	}
-	//등급체크
+
 	EEquipmentGrade itemgrade = IUBItem::Execute_GetItemGrade(tempitem->GetObject());
 	for (auto slot : craftSlots) {
 		if(slot->item==nullptr)
@@ -49,7 +49,7 @@ bool UUBCraftUI::CheckItem(int index)
 			return false;
 		}
 	}
-	//만약 장비조각이라면
+
 	EItemType itemtype = IUBItem::Execute_GetItemType(tempitem->GetObject());
 	if (itemtype == EItemType::IT_Material) {
 		UUBMaterial* material = Cast<UUBMaterial>(tempitem->GetObject());

@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "UBHitAnimNotify.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBHitAnimNotify : public UAnimNotify
 {

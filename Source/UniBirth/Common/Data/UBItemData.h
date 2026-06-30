@@ -58,21 +58,21 @@ struct FConsumableStruct : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FString Name;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 maxCount; //최대 소지 갯수
+    int32 maxCount;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 maxUseCount; //사용 가능 횟수
+    int32 maxUseCount;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FString Buff;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FString Icon;
 
 };
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBItemData : public UDataAsset
 {
 	GENERATED_BODY()
-	
+
 };

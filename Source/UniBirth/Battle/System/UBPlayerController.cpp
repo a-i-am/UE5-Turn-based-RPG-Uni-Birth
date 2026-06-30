@@ -32,7 +32,7 @@ void AUBPlayerController::BeginPlay()
     auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
     Subsystem->AddMappingContext(DefaultMapping, 0);
     AUBGameStateBase* GS = GetWorld()->GetGameState<AUBGameStateBase>();
-    //GS->OnGameStart.AddUObject(this, &AUBPlayerController::ForceEnterPlayerTurnCamera);
+
 
     CrosshairWidget = CreateWidget<UUserWidget>(this, CrosshairWidgetClass);
     if (CrosshairWidget)
@@ -87,14 +87,14 @@ void AUBPlayerController::SetupInputComponent()
 
 void AUBPlayerController::HandleInputAction(const FInputActionInstance& Instance)
 {
-    // 누른 키 가져오는 함수.
+
     const UUBInputAction* uAction = Cast<UUBInputAction>(Instance.GetSourceAction());
     if (uAction)
     {
         ForWardActionToASC(uAction->ActionTag);
     }
 }
-// 카메라 블렌드
+
 void AUBPlayerController::EnterPlayerTurnCamera()
 {
     FViewTargetTransitionParams Params;
@@ -119,12 +119,12 @@ void AUBPlayerController::EnterPlayerTurnCamera()
 
     SetViewTargetWithBlend(GetPawn(), Params.BlendTime);
 }
-//타겟팅모드 
+
 void AUBPlayerController::EnterTargetingMode()
 {
     if (!BM) return;
 
-    //타겟 가져오기
+
     TargetList = BM->targetList;
     if (TargetList.Num() == 0) {
         GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, TEXT(" TargetList is null"));
@@ -132,19 +132,19 @@ void AUBPlayerController::EnterTargetingMode()
     }
     CurrentTargetIndex = 0;
     CurrentTarget = TargetList[0];
- 
+
     SetViewTargetWithBlend(BM, 0.25f);
     UpdateTargetCamera();
-    ///여기에 딜레이 걸기
+
 
     GetWorld()->GetTimerManager().SetTimer(
         TargetingDelayHandle,
         this,
         &AUBPlayerController::FinishEnterTargetingMode,
-        0.5f,   // 카메라 블렌드 시간과 맞추는 게 보통 좋음
+        0.5f,
         false
     );
-    
+
 
 }
 
@@ -156,11 +156,11 @@ void AUBPlayerController::OnPlayerTurnStarted(AUBCombatUnit* unit)
         return;
     }
     Possess(unit);
-    
+
     FindTargetCamera();
     CreateWiget();
     EnterPlayerTurnCamera();
-    //EnterTargetingMode();
+
 }
 
 void AUBPlayerController::UpdateTargetCamera()
@@ -173,7 +173,7 @@ void AUBPlayerController::UpdateTargetCamera()
         CurrentTarget->GetActorLocation() + FVector(0, -450, 70.f);
 
     FRotator CamRot = CurrentTarget->GetActorRotation();
-    CamRot.Pitch = 0.f; 
+    CamRot.Pitch = 0.f;
     CamRot.Roll = 0.f;
     CamRot.Yaw = 90.0f;
 
@@ -223,7 +223,7 @@ void AUBPlayerController::ChangeTarget(int32 Direction)
 
     CurrentTargetIndex = (CurrentTargetIndex + Direction + TargetList.Num()) % TargetList.Num();
     CurrentTarget = TargetList[CurrentTargetIndex];
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
     UpdateTargetCamera();
 }
 
@@ -273,7 +273,7 @@ void AUBPlayerController::CreateWiget()
 bool AUBPlayerController::InputKey(const FInputKeyParams& Params)
 {
     bool bresult = Super::InputKey(Params);
- 
+
     AUBBattleHUD* hud = GetHUD<AUBBattleHUD>();
     if (hud == nullptr) {
         return bresult;
@@ -281,7 +281,7 @@ bool AUBPlayerController::InputKey(const FInputKeyParams& Params)
     if (Params.Event != EInputEvent::IE_Pressed) {
         return bresult;
     }
-    //@TODO
+
     if (bIsTargetingMode == true) return bresult;
     UUBBattleSelectBase* currentwidget= nullptr;
     if (hud->CharacterUI != nullptr) {
@@ -329,7 +329,7 @@ void AUBPlayerController::ExitTargetingMode()
     bIsTargetingMode = false;
     ShowCrosshair(false);
     EnterPlayerTurnCamera();
-   
+
 }
 
 void AUBPlayerController::ForceEnterPlayerTurnCamera()

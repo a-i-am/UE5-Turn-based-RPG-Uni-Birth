@@ -6,16 +6,16 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "UBSequenceCutAnimNotify.generated.h"
 
-/**
- * 
- */
+
+
+
 class ULevelSequencePlayer;
 
 UCLASS()
 class UNIBIRTH_API UUBSequenceCutAnimNotify : public UAnimNotify
 {
 	GENERATED_BODY()
-	/*UUBSequenceCutAnimNotify();*/
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cutscene")
 	TObjectPtr<class ULevelSequence> Sequence;

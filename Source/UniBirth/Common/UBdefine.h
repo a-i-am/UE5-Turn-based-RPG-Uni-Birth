@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -126,10 +126,10 @@ enum class EParryzoneGrade : uint8
 UENUM(BlueprintType)
 enum class ENotifyType : uint8
 {
-	Left,// A
-	Right,  // D
-	Up, // W
-	Down, // S
+	Left,
+	Right,
+	Up,
+	Down,
 	None,
 };
 UENUM(BlueprintType)
@@ -224,10 +224,10 @@ UENUM(BlueprintType)
 enum class EUnitState : uint8
 {
 	None,
-	Stealth,     // 은신
-	Poisoning,	 // 중독
-	Stun,        // 기절
-	Burn,		 // 화상
+	Stealth,
+	Poisoning,
+	Stun,
+	Burn,
 };
 
 UENUM(BlueprintType)
@@ -244,9 +244,9 @@ enum class EPassiveCondition : uint8
 UENUM(BlueprintType)
 enum class EBuffDurType : uint8
 {
-	Permanent,      // 1) 영구
-	TurnDuration,   // 2) 턴 지속
-	StackPerTurn    // 3) 턴마다 강화
+	Permanent,
+	TurnDuration,
+	StackPerTurn
 };
 
 UENUM(BlueprintType)

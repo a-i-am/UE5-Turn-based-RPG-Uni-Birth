@@ -2,5 +2,3 @@
 
 
 #include "Common/Item/UBItem.h"
-
-// Add default functionality here for any IUBItem functions that are not pure virtual.

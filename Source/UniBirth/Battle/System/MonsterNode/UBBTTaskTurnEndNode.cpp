@@ -17,8 +17,8 @@ EBTNodeResult::Type UUBBTTaskTurnEndNode::ExecuteTask(UBehaviorTreeComponent& Ow
     AUBAIController* AI = Cast<AUBAIController>(OwnerComp.GetAIOwner());
     if (!AI) return EBTNodeResult::Failed;
     AI->GetBlackboardComponent()->SetValueAsBool("bIsMyTurn", false);
-    
-    // ео а╬╥А
+
+
     if (ABattleGameMode* GM = GetWorld()->GetAuthGameMode<ABattleGameMode>())
     {
         if (ABattleManager* BM = GM->GetBattleManager())

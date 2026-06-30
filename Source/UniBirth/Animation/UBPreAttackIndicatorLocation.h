@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "UBPreAttackIndicatorLocation.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBPreAttackIndicatorLocation : public UAnimNotify
 {
@@ -23,7 +23,7 @@ public:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 	void SpawnParticle();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
-	FVector FXScale = FVector(1.f);	
+	FVector FXScale = FVector(1.f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
 	FRotator FXRotation = FRotator::ZeroRotator;
@@ -31,9 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FX")
 	FVector FXLocation = FVector(1.f);
 
-	
+
 
 };
 
-	
+
 

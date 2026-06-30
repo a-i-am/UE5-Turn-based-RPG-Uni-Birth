@@ -15,17 +15,17 @@
 #include "Common/SubSystem/UBDamageSubsystem.h"
 #include "Component/UBComboBuffComponent.h"
 #include "Component/UBBuffComponent.h"
-// Sets default values
+
 
 AUBBaseMonster::AUBBaseMonster()
 {
-	
+
 	teamType = ETeamType::Enemy_Team;
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	AIControllerClass = AUBAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-	 
+
 }
 void AUBBaseMonster::BeginPlay()
 {
@@ -36,13 +36,13 @@ void AUBBaseMonster::BeginPlay()
 	HealthComp->OnShieldDestroy.AddUObject(this, &AUBBaseMonster::HandleShieldBroken);
 }
 
-// Called every frame
+
 void AUBBaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-//어택 시작
+
 void AUBBaseMonster::startAttack()
 {
 	currentState = EActionState::Attack;
@@ -66,7 +66,7 @@ void AUBBaseMonster::NotifyAttackIntent()
 
 void AUBBaseMonster::AttackHit()
 {
-	//성공실패 반환
+
 	result = bm->GetReactionResult();
 
 	const FCharacterActionFXOverride* hitFX = nullptr;
@@ -93,8 +93,8 @@ void AUBBaseMonster::AttackHit()
 			HealthComp->ApplyDamage(FinalDamage, Target, nullptr, FVector::ZeroVector, FRotator::ZeroRotator, CurrentSkillData->hitCount);
 			continue;
 		}
-		
-		// 캐릭터 피격 시
+
+
 		AUBPlayer* player = Cast<AUBPlayer>(Target);
 		if (player)
 		{
@@ -109,8 +109,8 @@ void AUBBaseMonster::AttackHit()
 				UUBSkillManager* SM = GI->GetSubsystem<UUBSkillManager>();
 				if (SM)
 				{
-					// "공격자(this)가 대상(Target)에게 데미지를 입혔음"을 보고합니다.
-					// 이를 통해 '마비 독' 같은 패시브가 자동으로 타겟에게 적용됩니다.
+
+
 					SM->OnUnitHitDamage(this, Target, FinalDamage);
 				}
 			}
@@ -133,7 +133,7 @@ void AUBBaseMonster::StartAttackSequence(FGameplayTag ActionTag, AUBCombatUnit* 
 	SkillManager->RequestSkillUse(this, CurrentSkillData->skill_key, target);
 	ResolveTargetsFromSkill();
 
-	//1은 근거리
+
 	if (CurrentSkillData->AttackType == 1)
 	{
 		StartMove();
@@ -174,9 +174,9 @@ void AUBBaseMonster::AllPlayerIdle()
 void AUBBaseMonster::MoveToTarget()
 {
 	float  DeltaTime = GetWorld()->GetDeltaSeconds();
-	FVector curr = GetActorLocation();              
-	FVector Dir = (MoveTargetLocation - curr).GetSafeNormal();  
-	
+	FVector curr = GetActorLocation();
+	FVector Dir = (MoveTargetLocation - curr).GetSafeNormal();
+
 	FVector Next = curr + (Dir * statsComp->currentStats.speed * DeltaTime);
 	SetActorLocation(Next);
 
@@ -226,7 +226,7 @@ void AUBBaseMonster::MonsterOnActionFinished()
 			}
 			break;
 	}
-	
+
 	CurrentTarget->result = EResultType::None;
 
 	if (monsterType == EMonsterType::Melee)
@@ -255,7 +255,7 @@ void AUBBaseMonster::StartReturnMove()
 void AUBBaseMonster::BeforeLocation()
 {
 	float deltaTime = GetWorld()->GetDeltaSeconds();
-	
+
 	FVector Curr = GetActorLocation();
 	FVector dir = (OriginalLocation - Curr).GetSafeNormal();
 
@@ -269,12 +269,12 @@ void AUBBaseMonster::BeforeLocation()
 		StartRotateMeshToOrigin();
 	}
 }
-// 타겟 바라보기 시작
+
 void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* Target)
 {
 	OriginalLocation = GetActorLocation();
 	OriginRotator = GetMesh()->GetRelativeRotation();
-	
+
 	GetWorld()->GetTimerManager().ClearTimer(RotateTimerHandle);
 
 	FVector From = GetActorLocation();
@@ -282,7 +282,7 @@ void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* Target)
 
 	FVector Dir = To - From;
 	Dir.Z = 0;
-		
+
 	TargetRotator = Dir.Rotation();
 	TargetRotator.Yaw += 90.f;
 
@@ -313,10 +313,10 @@ void AUBBaseMonster::RotateTickToOrigin()
 		}
 	}
 	AllPlayerIdle();
-	 
+
 }
 
-// 회전복귀
+
 void AUBBaseMonster::StartRotateMeshToOrigin()
 {
 	if (bIsDeath == true) return;
@@ -349,7 +349,7 @@ void AUBBaseMonster::ResolveTargetsFromSkill()
 	ResolvedTargets.Empty();
 
 	if (!CurrentSkillData) return;
-	
+
 	if (CurrentSkillData->target_scope == 1)
 	{
 		if (CurrentTarget)
@@ -360,11 +360,11 @@ void AUBBaseMonster::ResolveTargetsFromSkill()
 	}
 	else if (CurrentSkillData->target_scope == 3)
 	{
-		// 단체 (전체)
+
 		ResolvedTargets = bm->GetAllPlayer();
 	}
 }
-//스킬 키 찾기
+
 FCharacterSkill* AUBBaseMonster::ResolveSkillDataFromActionTag(
 	const FGameplayTag& ActionTag)
 {

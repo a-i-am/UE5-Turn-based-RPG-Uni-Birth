@@ -18,27 +18,27 @@ enum class EBattleState : uint8
 };
 class AUBCombatUnit;
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnMonsterAttackStarted,
-	AUBCombatUnit*  /*attack */, FCharacterSkill* skill /* Target*/);
+	AUBCombatUnit*  , FCharacterSkill* skill );
 DECLARE_MULTICAST_DELEGATE_ThreeParams(
 	FOnMonsterAttackResult,
-	AUBCombatUnit* /*Attacker*/,
-	AUBCombatUnit* /*Target*/,
-	EResultType /*Result*/
+	AUBCombatUnit* ,
+	AUBCombatUnit* ,
+	EResultType
 );
 DECLARE_MULTICAST_DELEGATE(FOnUIHide);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHitAction, AUBCombatUnit* /*Target*/, EResultType);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHitAction, AUBCombatUnit* , EResultType);
 DECLARE_MULTICAST_DELEGATE(FOnTimeDelayEnded);
 UCLASS()
 class UNIBIRTH_API ABattleManager : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
+
 	ABattleManager();
 
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
 
 public:
@@ -49,8 +49,8 @@ public:
 	void ResetCharacters();
 	bool CheckGameEnd();
 
-public:	
-	// Called every frame
+public:
+
 	virtual void Tick(float DeltaTime) override;
 
 	void BuildTurnOrder();
@@ -63,15 +63,15 @@ public:
 	TArray<class AUBCombatUnit*> characters;
 
 	UPROPERTY(EditAnywhere)
-	TArray<TObjectPtr<AUBCombatUnit>> TurnOrder;       
+	TArray<TObjectPtr<AUBCombatUnit>> TurnOrder;
 
 	UPROPERTY(EditAnywhere)
 	TArray<TObjectPtr<AUBCombatUnit>> CurrentTurnOrder;
 
-	
+
 	UPROPERTY(EditAnywhere)
 	TArray<TObjectPtr<AUBCombatUnit>> TotalTurnOrder;
-	
+
 	AUBCombatUnit* currentCharacter = nullptr;
 
 	UPROPERTY(EditAnywhere)

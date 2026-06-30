@@ -9,7 +9,7 @@ UUBBuffComponent::UUBBuffComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-// Called when the game starts1
+
 void UUBBuffComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -36,10 +36,10 @@ void UUBBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 {
-	//10개의 버프를 이미 보유하고 있는 캐릭터에게 새로운 버프가 부여될 경우
-	//Add되기 전에, 낮은 우선도의 맨 앞자리를 제거해줘야함
 
-	// 기존에 동일한 ID의 버프가 있는지 확인
+
+
+
 	FBuffSlot* ExistingBuff = nullptr;
 
 	if (CurrBuffs[(int32)NewBuff.priority].Num() > 0)
@@ -65,7 +65,7 @@ void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 			{
 				onBuffChangedDynamic.Broadcast();
 			}
-			return; // 새 슬롯을 만들지 않고 종료
+			return;
 
 		case EBuffStackRule::CalculateSum:
 			if (ExistingBuff->CurrentStack < ExistingBuff->MaxStackCount)
@@ -74,8 +74,8 @@ void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 				{
 					ApplyStat(*ExistingBuff, -1);
 				}
-				
-				// 값 합산 및 스택 증가(배열의 모든 수치를 각각 합산)
+
+
 				for (int32 i = 0; i < ExistingBuff->Values.Num(); ++i)
 				{
 					if (NewBuff.Values.IsValidIndex(i))
@@ -83,9 +83,9 @@ void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 						ExistingBuff->Values[i] += NewBuff.Values[i];
 					}
 				}
-				
+
 				ExistingBuff->CurrentStack++;
-				
+
 				if (bApplyStat)
 				{
 					ApplyStat(*ExistingBuff, 1);
@@ -107,14 +107,14 @@ void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 	{
 		MakeSlot();
 	}
-	
+
 	NewBuff.BaseValues = NewBuff.Values;
 	NewBuff.CurrentStack = 1;
 
-	// 버프추가
+
 	EBuffPriority TargetType = NewBuff.priority;
 	CurrBuffs[(int32)TargetType].Add(NewBuff);
-	
+
 	if (bApplyStat)
 	{
 		ApplyStat(NewBuff, 1);
@@ -129,9 +129,9 @@ void UUBBuffComponent::AddBuffToStat(FBuffSlot NewBuff, bool bApplyStat)
 void UUBBuffComponent::DeleteBuff(FBuffSlot targetBuff)
 {
 	EBuffPriority TargetType = targetBuff.priority;
-	TArray<FBuffSlot>& Arr = CurrBuffs[(int32)TargetType]; // 특정타입을 보관하는 배열. 그 안에서 순회
+	TArray<FBuffSlot>& Arr = CurrBuffs[(int32)TargetType];
 
-	// 삭제할 대상이 정해져있으니까 아이디로 검색
+
 	for (int i = 0; i < Arr.Num(); i++)
 	{
 		if (Arr[i].ID == targetBuff.ID)
@@ -162,7 +162,7 @@ void UUBBuffComponent::DeleteBuffByReason(EDelCase reason)
 						return true;
 					}
 				}
-				
+
 				return false;
 			});
 	}
@@ -176,7 +176,7 @@ void UUBBuffComponent::MakeSlot()
 		return;
 	}
 
-	// 낮은 우선도의 맨 앞자리를 제거
+
 	for (int32 i = (int32)EBuffPriority::Item; i >= 0; --i)
 	{
 		if (CurrBuffs[i].Num() != 0)
@@ -200,10 +200,10 @@ int32 UUBBuffComponent::GetTotalNum()
 
 void UUBBuffComponent::RemoveTurnExpiredBuffs()
 {
-	// RemoveAll 내부의 람다 함수([this](const FBuffSlot& Slot))는 배열에 요소가 존재하고 조건 검사가 시작될 때만 진입
-	// 만약 첫 번째 배열이 비어있다면, if (Slot.DurType == EBuffDurType::.. 이 부분 중단점까지 닿지 x)
 
-	// 0~2번까지 모든 우선순위 배열을 명확히 순회
+
+
+
 	for (int32 i = 0; i < 3; ++i)
 	{
 		int32 RemovedCount = CurrBuffs[i].RemoveAll([this](const FBuffSlot& Slot)
@@ -225,7 +225,7 @@ void UUBBuffComponent::RemoveTurnExpiredBuffs()
 
 TArray<UTexture2D*> UUBBuffComponent::GetAllIcon() const
 {
-	// 버프 아이콘들이 모여있는 공통 폴더
+
 	const FString BasePath = TEXT("/Game/Assets/Texture/UI/Battle/BuffIcons/");
 
 	TArray<UTexture2D*> OutArray;
@@ -233,8 +233,8 @@ TArray<UTexture2D*> UUBBuffComponent::GetAllIcon() const
 	{
 		for (int32 index = 0; index < CurrBuffs[priority].Num(); ++index)
 		{
-			// Object Path 생성
-			// /Game/UI/Icons/Sword_Icon.Sword_Icon
+
+
 			const FString FullPath = BasePath + CurrBuffs[priority][index].Icon + TEXT(".") + CurrBuffs[priority][index].Icon;
 
 			UTexture2D* Texture = LoadObject<UTexture2D>(
@@ -246,7 +246,7 @@ TArray<UTexture2D*> UUBBuffComponent::GetAllIcon() const
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Failed to load icon: %s"), *FullPath);
 			}
-		
+
 			OutArray.Add(Texture);
 		}
 	}
@@ -272,7 +272,7 @@ void UUBBuffComponent::ApplyStat(const FBuffSlot& newBuff, int32 Op)
 	UE_LOG(LogTemp, Warning, TEXT("Buff ID %d : Stats Num %d, Values Num %d"), newBuff.ID, newBuff.BuffStats.Num(), newBuff.Values.Num());
 
 	FUBStats PreStats = stat->currentStats;
-	
+
 	if (newBuff.DurType == EBuffDurType::Permanent || newBuff.DurType == EBuffDurType::StackPerTurn || newBuff.DurType == EBuffDurType::TurnDuration)
 	{
 		for (int32 i = 0; i < newBuff.BuffStats.Num(); ++i)
@@ -436,7 +436,7 @@ void UUBBuffComponent::ApplyStat(const FBuffSlot& newBuff, int32 Op)
 			}
 		}
 	}
-	FString CharacterName = Unit->GetName(); // 플레이어 이름
+	FString CharacterName = Unit->GetName();
 	LogStatChange(CharacterName, newBuff, PreStats, stat->currentStats);
 }
 
@@ -446,7 +446,7 @@ void UUBBuffComponent::AdvanceBuffTurns()
 	{
 		for (FBuffSlot& Slot : CurrBuffs[priority])
 		{
-			// 매 턴 시작 시 효과가 추가됨
+
 			if (Slot.DurType == EBuffDurType::StackPerTurn)
 			{
 				if (Slot.CurrentStack < Slot.MaxStackCount)
@@ -457,7 +457,7 @@ void UUBBuffComponent::AdvanceBuffTurns()
 					{
 						if (Slot.BaseValues.IsValidIndex(i))
 						{
-							// 효과 중첩
+
 							Slot.Values[i] += Slot.BaseValues[i];
 						}
 					}
@@ -467,7 +467,7 @@ void UUBBuffComponent::AdvanceBuffTurns()
 				}
 			}
 
-			// 지정된 턴 수 만큼만 유지
+
 			if (Slot.DurType == EBuffDurType::TurnDuration)
 			{
 				Slot.CurrTurnCount++;
@@ -480,7 +480,7 @@ void UUBBuffComponent::AdvanceBuffTurns()
 void UUBBuffComponent::LogStatChange(const FString& CharName, const FBuffSlot& Buff, const FUBStats& Before, const FUBStats& After)
 {
 #if WITH_EDITOR
-	// 예: "[Player_1][Buff ID:3001]"
+
 	FString BuffPrefix = FString::Printf(TEXT("[%s][Buff ID:%d]"), *CharName, Buff.ID);
 
 	for (TFieldIterator<FProperty> Proplt(FUBStats::StaticStruct()); Proplt; ++Proplt)
@@ -489,8 +489,8 @@ void UUBBuffComponent::LogStatChange(const FString& CharName, const FBuffSlot& B
 		FString PropName = Prop->GetName();
 		const void* BeforePtr = Prop->ContainerPtrToValuePtr<void>(&Before);
 		const void* AfterPtr = Prop->ContainerPtrToValuePtr<void>(&After);
-		
-		// float
+
+
 		if (FFloatProperty* FloatProp = CastField<FFloatProperty>(Prop))
 		{
 			float ValBefore = FloatProp->GetFloatingPointPropertyValue(BeforePtr);
@@ -503,7 +503,7 @@ void UUBBuffComponent::LogStatChange(const FString& CharName, const FBuffSlot& B
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *LogMsg);
 			}
 		}
-		// int32
+
 		else if (FIntProperty* IntProp = CastField<FIntProperty>(Prop))
 		{
 			int32 ValBefore = IntProp->GetSignedIntPropertyValue(BeforePtr);
@@ -516,7 +516,7 @@ void UUBBuffComponent::LogStatChange(const FString& CharName, const FBuffSlot& B
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *LogMsg);
 			}
 		}
-		// Enum(상태 이상)
+
 		else if (FEnumProperty* EnumProp = CastField<FEnumProperty>(Prop))
 		{
 			const void* ValAddrBefore = EnumProp->ContainerPtrToValuePtr<void>(&Before);
@@ -528,7 +528,7 @@ void UUBBuffComponent::LogStatChange(const FString& CharName, const FBuffSlot& B
 			{
 				FString NameBefore = EnumProp->GetEnum()->GetNameStringByValue(ValBefore);
 				FString NameAfter = EnumProp->GetEnum()->GetNameStringByValue(ValAfter);
-				
+
 				FString LogMsg = FString::Printf(TEXT("%s %s : %s->%s"), *BuffPrefix, *PropName, *NameBefore, *NameAfter);
 				GEngine->AddOnScreenDebugMessage(-1, 20.0f, FColor::Orange, LogMsg);
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *LogMsg);
@@ -550,7 +550,7 @@ void FBuffSlot::MakeDelCase(FString DelCaseStr)
 	{
 		int64 EnumValue = EnumPtr->GetValueByName(FName(*OutArray[i]));
 
-		// 본인 Slot의 결과에 추가
+
 		DelCase.Add((EDelCase)EnumValue);
 	}
 }

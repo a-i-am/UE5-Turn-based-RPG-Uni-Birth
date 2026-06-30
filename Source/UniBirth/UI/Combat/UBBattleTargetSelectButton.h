@@ -7,9 +7,9 @@
 #include "UI/Data/CharacterPortraitData.h"
 #include "UBBattleTargetSelectButton.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBBattleTargetSelectButton : public UUserWidget
 {

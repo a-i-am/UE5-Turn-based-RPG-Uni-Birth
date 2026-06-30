@@ -7,9 +7,9 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "UBAnimationSet.generated.h"
 
-/**
- * 
- */
+
+
+
 USTRUCT(BlueprintType)
 struct FAnimActionData
 {
@@ -35,6 +35,6 @@ public:
     TArray<FAnimActionData> Actions;
 
     const FAnimActionData* FindData(FGameplayTag Tag);
-   
+
 
 };

@@ -7,9 +7,9 @@
 #include "Common/Item/UBItem.h"
 #include "UBInventorySlot.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBInventorySlot : public UUBMainWidget
 {

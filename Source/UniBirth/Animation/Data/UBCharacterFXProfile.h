@@ -15,12 +15,12 @@ struct FCharacterActionFXOverride
 
 
     UPROPERTY(EditAnywhere)
-    FGameplayTag ActionTag;   
+    FGameplayTag ActionTag;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TObjectPtr<UParticleSystem> Particle = nullptr;
 
-    // Niagara
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TObjectPtr<UNiagaraSystem> NiagaraFX = nullptr;
 

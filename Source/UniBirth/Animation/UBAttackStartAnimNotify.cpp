@@ -9,7 +9,7 @@
 #include "Battle/System/BattleGameMode.h"
 #include "Character/Interface/UBCombatUnit.h"
 
-// *********  UI 띄우게하는 노티파이  ***********
+
 void UUBAttackStartAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	if (!MeshComp) return;

@@ -6,9 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "UBTransparentUI.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBTransparentUI : public UUserWidget
 {

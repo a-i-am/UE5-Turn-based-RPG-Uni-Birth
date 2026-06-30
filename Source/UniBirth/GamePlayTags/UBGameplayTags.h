@@ -16,7 +16,7 @@ namespace UBGameplayTags
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_StandUp);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Defence);
 
-    // 몬스터 전용 행동
+
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackA);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackB);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackC);

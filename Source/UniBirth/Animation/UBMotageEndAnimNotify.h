@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "UBMotageEndAnimNotify.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBMotageEndAnimNotify : public UAnimNotify
 {
