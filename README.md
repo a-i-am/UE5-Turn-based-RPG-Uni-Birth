@@ -10,6 +10,8 @@
 
 `33원정대`의 실시간 반응 요소를 참고한 Unreal Engine 턴제 RPG 팀 프로젝트입니다.
 
+최종 업데이트: 2026-06-30
+
 ### 프로젝트 정보
 
 | 항목 | 내용 |
@@ -48,9 +50,21 @@
 
 UI 입력, 전투 상태, 데이터 테이블, 스탯 갱신이 동시에 바뀌는 시스템에서는 상태 적용 순서와 제거 시점이 기능 정확도를 결정한다는 점을 배웠습니다.
 
+### 브랜치 및 커밋 정리
+
+- 리팩터링 커밋은 `refactor` / `refactoring` 키워드가 있는 경우만 분리해서 읽을 수 있게 정리합니다.
+- 플레이 흐름과 전투 시스템 변경을 README에서 먼저 확인할 수 있게 정리했습니다.
+
+### 업데이트 계획
+
+- 회피, 패링, 콤보 버프 영상 링크를 추가합니다.
+- 영상이 준비되면 썸네일과 함께 외부 링크만 유지합니다.
+
 ## English
 
 Uni Birth is a team turn-based RPG inspired by the real-time defensive interactions of Clair Obscur: Expedition 33.
+
+Last updated: 2026-06-30
 
 ### Project
 
@@ -86,3 +100,13 @@ Dodge, parry, and combo-buff footage will be uploaded as an external video. Only
 ### Lessons
 
 When UI input, combat state, data tables, and stat updates change together, the order of state application and removal is part of the feature's correctness.
+
+### Branch and Commit Notes
+
+- Refactoring commits are readable by the `refactor` / `refactoring` keywords.
+- The README keeps player flow, combat system, and implementation notes together.
+
+### Update Plan
+
+- Add dodge, parry, and combo-buff video links.
+- Keep only external links and thumbnails for video delivery.
