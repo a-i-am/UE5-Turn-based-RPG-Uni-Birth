@@ -10,17 +10,17 @@ UCLASS()
 class UNIBIRTH_API AUBSpawnPoint : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
+
 	AUBSpawnPoint();
 
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+
 	virtual void Tick(float DeltaTime) override;
 
 };

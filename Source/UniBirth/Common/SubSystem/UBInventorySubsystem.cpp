@@ -16,7 +16,7 @@ void UUBInventorySubsystem::SaveInventory()
 	if (UUBSaveGame* LoadedGame = Cast<UUBSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MainData"), 0)))
 	{
 		SavedInventory.Empty();
-		
+
 		for (auto& item : inventory)
 		{
 			if (!item.Value)
@@ -126,7 +126,7 @@ bool UUBInventorySubsystem::AddItem(EItemType itemtype, int32 itemID,int32 amoun
 			return true;
 		}
 	}return false;
-		
+
 	case EItemType::IT_Equipment:
 	{
 		if (inventory.Num() >= INVENTORY_SIZE) {
@@ -266,7 +266,7 @@ UUBConsumable* UUBInventorySubsystem::GetConsumablesByID(int32 itemid)
 	if (FConsumableStruct* consumabledata = gameinstance->GetConsumableData(itemid))
 	{
 		UUBConsumable* consumable = NewObject<UUBConsumable>(this);
-		//데이터 쭉 적용
+
 		consumable->maxCount = consumabledata->maxCount;
 		consumable->maxUseCount = consumabledata->maxUseCount;
 		consumable->name = consumabledata->Name;
@@ -291,7 +291,7 @@ UUBEquipment* UUBInventorySubsystem::GetEquipmentsByID(int32 itemid)
 		if (equipmentdata->EquipmentType == EEquipmentType::ET_Weapon)
 		{
 			UUBWeapon* weapon = NewObject<UUBWeapon>(this);
-			
+
 			weapon->weapontype = equipmentdata->Weapontype;
 			weapon->statvalue = equipmentdata->Value;
 			weapon->equipmentType = equipmentdata->EquipmentType;
@@ -299,7 +299,7 @@ UUBEquipment* UUBInventorySubsystem::GetEquipmentsByID(int32 itemid)
 			weapon->name = equipmentdata->Name;
 			weapon->icon = equipmentdata->Icon;
 			weapon->itemID = itemid;
-			
+
 			return weapon;
 		}
 		else {
@@ -311,7 +311,7 @@ UUBEquipment* UUBInventorySubsystem::GetEquipmentsByID(int32 itemid)
 			armor->name = equipmentdata->Name;
 			armor->icon = equipmentdata->Icon;
 			armor->itemID = itemid;
-			
+
 			return armor;
 		}
 	}
@@ -330,7 +330,7 @@ UUBMaterial* UUBInventorySubsystem::GetMaterialsByID(int32 itemid)
 	if (FMaterialStruct* materialdata = gameinstance->GetMaterialData(itemid))
 	{
 		UUBMaterial* material = NewObject<UUBMaterial>(this);
-		//데이터 쭉 적용
+
 		material->maxCount = materialdata->Amount;
 		material->name = materialdata->Name;
 		material->equipmentGrade = materialdata->EquipmentGrade;
@@ -361,7 +361,7 @@ void UUBInventorySubsystem::SaveEquipment() {
 		if (uniEquipment.Drone) {
 			uni.DroneID = uniEquipment.Drone->itemID;
 		}
-		
+
 
 		FCharacterEquipmentSaveStruct tau = LoadedGame->TauEquipment;
 		if (tauEquipment.Weapon) {
@@ -557,7 +557,7 @@ void UUBInventorySubsystem::Equip(UUBEquipment* equipment, ECharacterType charac
 	default:
 		break;
 	}
-	
+
 #pragma endregion
 }
 
@@ -565,7 +565,7 @@ void UUBInventorySubsystem::UnEquip(EEquipmentType equipmenttype, ECharacterType
 	if (inventory.Num() >= INVENTORY_SIZE) {
 		return;
 	}
-		
+
 #pragma region swtichcase
 	switch (equipmenttype)
 	{
@@ -705,12 +705,12 @@ void UUBInventorySubsystem::SortInventory()
 	if (inventory.Num() == 0)
 		return;
 
-	// 1. 키를 정렬
+
 	TArray<int32> Keys;
 	inventory.GetKeys(Keys);
 	Keys.Sort();
 
-	// 2. 새 Map 생성
+
 	TMap<int32, TScriptInterface<IUBItem>> NewInventory;
 
 	int32 NewIndex = 0;
@@ -723,7 +723,7 @@ void UUBInventorySubsystem::SortInventory()
 		NewIndex++;
 	}
 
-	// 3. 교체
+
 	inventory = MoveTemp(NewInventory);
 }
 
@@ -778,7 +778,7 @@ TArray<FEquipmentStruct> UUBInventorySubsystem::GetEquipmentStructByGrade(EEquip
 				continue;
 			}
 
-			// 조건 체크
+
 			if (RowData->EquipmentGrade == grade)
 			{
 				equipments.Add(*RowData);
@@ -796,7 +796,7 @@ TArray<FEquipmentStruct> UUBInventorySubsystem::GetRandomEquipmentStruct(TArray<
 		UE_LOG(LogTemp, Warning, TEXT("structs is empty"));
 		return equipments;
 	}
-	
+
 	int randomint = FMath::RandRange(1, 100);
 	EEquipmentType randomtype;
 	if (randomint <= 22) {
@@ -814,7 +814,7 @@ TArray<FEquipmentStruct> UUBInventorySubsystem::GetRandomEquipmentStruct(TArray<
 	else{
 		randomtype = EEquipmentType::ET_Weapon;
 	}
-	
+
 	for (FEquipmentStruct equipment : structs) {
 		if (equipment.EquipmentType == randomtype)
 		{
@@ -844,10 +844,10 @@ FEquipmentStruct UUBInventorySubsystem::GetEquipmentInStruct(TArray<FEquipmentSt
 
 void UUBInventorySubsystem::Assemble(TArray<int32> indexlist)
 {
-	//아이템 등급 체크
+
 	EEquipmentGrade itemgrade = IUBItem::Execute_GetItemGrade(inventory[indexlist[1]].GetObject());
 	EEquipmentGrade targetgrade = EEquipmentGrade::EG_Common;
-	//아이템들 삭제
+
 	for (int32 index : indexlist) {
 		RemoveItem(index);
 	}
@@ -869,20 +869,20 @@ void UUBInventorySubsystem::Assemble(TArray<int32> indexlist)
 	else {
 		return;
 	}
-	//아이템 생성
+
 	TArray<FEquipmentStruct> equipments = GetEquipmentStructByGrade(targetgrade);
 	TArray<FEquipmentStruct> randomequipments = GetRandomEquipmentStruct(equipments);
 	FEquipmentStruct equipment = GetEquipmentInStruct(randomequipments);
 
-	//아이템 Add
+
 	AddItem(EItemType::IT_Equipment, equipment.ID);
 }
 
 void UUBInventorySubsystem::Disassemble(int32 index)
 {
-	//아이템 등급 체크
+
 	EEquipmentGrade itemgrade = IUBItem::Execute_GetItemGrade(inventory[index].GetObject());
-	//아이템 삭제
+
 	RemoveItem(index);
 	switch (itemgrade) {
 	case EEquipmentGrade::EG_Legendary:

@@ -7,9 +7,9 @@
 #include "UBCharacterPortrait.h"
 #include "UBCharacterPortraitList.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCharacterPortraitList : public UUserWidget
 {
@@ -31,10 +31,10 @@ public:
 	UUBCharacterPortrait* CharacterPortrait_5;
 	UPROPERTY(meta = (BindWidget))
 	UUBCharacterPortrait* CharacterPortrait_6;
-	//UPROPERTY(meta = (BindWidget))
-	//UUBCharacterPortrait* CharacterPortrait_7;
-	//UPROPERTY(meta = (BindWidget))
-	//UUBCharacterPortrait* CharacterPortrait_8;
+
+
+
+
 
 	UFUNCTION(BlueprintCallable)
 	void ReApplyAll();

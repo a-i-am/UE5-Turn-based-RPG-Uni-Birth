@@ -10,7 +10,7 @@ UUBStatsComponent::UUBStatsComponent()
 {
 }
 
-// Called when the game starts
+
 void UUBStatsComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -31,12 +31,12 @@ void UUBStatsComponent::LogCurrentStats(const FString& Prefix)
 
 }
 
-// Called every frame
+
 void UUBStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+
 }
 
 void UUBStatsComponent::ApplyComboStatByType(EBuffStatType StatType, int32 Value, float Rate)
@@ -79,7 +79,7 @@ void UUBStatsComponent::ApplyMPHeal(int32 value, float rate)
     int32 OldMp = currentStats.Mp;
 
     CalcStatValue(currentStats.Mp, stats.Mp, value, rate);
-    
+
     if (currentStats.Mp < OldMp)
     {
         currentStats.Mp = OldMp;
@@ -97,7 +97,7 @@ void UUBStatsComponent::ApplyAttackStats(int32 value, float rate)
 
 void UUBStatsComponent::ApplySpeedStats(int32 value, float rate)
 {
-    // 비율값으로 증가
+
     CalcStatValue(currentStats.AttackSpeed, stats.AttackSpeed, value, rate);
     LogCurrentStats(TEXT("Apply Speed"));
 
@@ -118,22 +118,22 @@ void UUBStatsComponent::ApplyMaxHP(int32 value, float rate)
 void UUBStatsComponent::ApplyHPheal(int32 value, float rate)
 {
     int32 OldHp = currentStats.Hp;
-    
-    // 머지 시 체력 버프가 해제되지 않고 추가되는 로직만 작동하니까 계산은 먼저 하기
+
+
     CalcStatValue(currentStats.Hp, stats.Hp, value, rate);
-    
-    // 버프가 해제될 때 결과적으로 기존 체력은 깎지 않게 처리
+
+
     if (currentStats.Hp < OldHp)
     {
         currentStats.Hp = OldHp;
     }
-    
+
     currentStats.Hp = FMath::Clamp(currentStats.Hp, 0, currentStats.MaxHP);
     LogCurrentStats(TEXT("Apply HP"));
 }
 void UUBStatsComponent::ApplyDefence(int32 value, float rate)
 {
-    // 비율값으로 증가
+
     CalcStatValue(currentStats.Defence, stats.Defence, value, rate);
     LogCurrentStats(TEXT("Apply Defence"));
 }
@@ -206,7 +206,7 @@ void UUBStatsComponent::UpdateComboStat(EBuffStatType StatType, int32 NewFixed, 
     int32* CurrFixed = ComboFixedBonusMap.Find(StatType);
     int32 OldFixed = CurrFixed ? *CurrFixed : 0;
 
-    if (OldFixed != 0) 
+    if (OldFixed != 0)
     {
         ApplyComboStatByType(StatType, -OldFixed, 0.0f);
         ComboFixedBonusMap.FindOrAdd(StatType) = NewFixed;

@@ -9,12 +9,12 @@ UUBHitAnimNotify::UUBHitAnimNotify()
 
 void UUBHitAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	//AUBBaseMonster* monster = Cast<AUBBaseMonster>(MeshComp->GetOwner());
-	//{
-	//	if (monster == nullptr) return;
 
-	//	monster->HitAcitonMultiCast();
-	//}
+
+
+
+
+
 
 }
 

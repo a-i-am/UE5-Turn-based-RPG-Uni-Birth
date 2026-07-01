@@ -6,9 +6,9 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "UBBTTaskTurnEndNode.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBBTTaskTurnEndNode : public UBTTaskNode
 {
@@ -17,5 +17,5 @@ public:
 	UUBBTTaskTurnEndNode();
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 
-	
+
 };

@@ -7,9 +7,9 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "UBBTTaskAttackNode.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBBTTaskAttackNode : public UBTTaskNode
 {
@@ -22,8 +22,8 @@ protected:
 
 	void OnActionFinished(UBehaviorTreeComponent* OwnerComp);
 public:
-	/*UPROPERTY(EditAnyWhere, BluePrintReadOnly)
-	TArray<FGameplayTag>actionTag ;*/
+
+
 
 	UPROPERTY(EditAnyWhere, BluePrintReadOnly)
 	FGameplayTag lastActionTag;

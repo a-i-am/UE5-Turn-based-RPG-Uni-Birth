@@ -17,7 +17,7 @@ void UUBInventoryUI::NativeConstruct()
 		}
 	}
 
-	ResetInventorySlots(); // √÷√  1»∏
+	ResetInventorySlots();
 }
 
 void UUBInventoryUI::NativeDestruct()

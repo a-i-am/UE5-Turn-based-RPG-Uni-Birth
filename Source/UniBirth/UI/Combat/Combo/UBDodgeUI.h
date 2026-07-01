@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
@@ -14,7 +14,7 @@ class UNIBIRTH_API UUBDodgeUI : public UUBBattleSelectBase
 	GENERATED_BODY()
 
 protected:
-	virtual void NativeConstruct() override;// 위젯이 생성될 때 초기화하는 함수
+	virtual void NativeConstruct() override;
 
 public:
     UPROPERTY()
@@ -29,7 +29,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Delay", meta = (DisplayName = "결과 딜레이 시간"))
     float resultDelay = 0.02f;
 public:
-    
+
     bool bResultIsDecided = false;
     FTimerHandle EndGameTimerHandle;
     TMap<TCHAR, TCHAR> oppositeKeyMap;
@@ -68,7 +68,7 @@ public:
     void HidenDoggeCanvas();
     void OnTimeOut();
 
-    // 초기화 (StartParry() 호출할 때마다 수행)
+
     UFUNCTION(BlueprintCallable)
     void StartDodge(bool allDefence);
 };

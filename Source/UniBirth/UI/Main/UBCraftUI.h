@@ -6,9 +6,9 @@
 #include "UI/Main/UBMainWidget.h"
 #include "UBCraftUI.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCraftUI : public UUBMainWidget
 {

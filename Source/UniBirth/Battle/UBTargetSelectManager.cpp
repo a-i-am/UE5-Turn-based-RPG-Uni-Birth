@@ -19,8 +19,8 @@ void  UUBTargetSelectManager::Activate()
 
 	bActive = true;
 	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, TEXT("in Selector"));
-	//CurrentIndex = FindFirstEnemyIndex();   // 현재 characters 배열 기반
-	//UpdateHighlight();
+
+
 }
 void  UUBTargetSelectManager::Deactivate()
 {

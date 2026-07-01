@@ -8,14 +8,14 @@
 #include "Battle/System/UBPlayerController.h"
 #include  "Component/ActionSystemComponent.h"
 #include "GameFramework/PlayerController.h"
-#include "GameFramework/Pawn.h"           
+#include "GameFramework/Pawn.h"
 void UUIWiget::NativeConstruct()
 {
     Super::NativeConstruct();
 
     if (AtkBtn)
     {
-       
+
         AtkBtn->OnClicked.AddDynamic(this, &UUIWiget::AtkBtnClick);
     }
 }

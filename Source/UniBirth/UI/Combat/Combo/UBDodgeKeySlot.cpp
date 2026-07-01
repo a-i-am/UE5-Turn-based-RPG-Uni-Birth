@@ -32,8 +32,8 @@ void UUBDodgeKeySlot::SetMatched(bool bIsMatched)
         keyImage->SetColorAndOpacity(SuccessColor);
     }
     else
-    {   
-        // 폰트->배경색 따로 글자색 따로 적용, 이미지->SetColorAndOpacity 하나면 된다)
+    {
+
         keyImage->SetColorAndOpacity(FailColor);
     }
 }

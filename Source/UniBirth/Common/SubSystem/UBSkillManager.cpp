@@ -132,7 +132,7 @@ void UUBSkillManager::SetAtvSkill(bool Value)
 void UUBSkillManager::OnTurnStart(AUBCombatUnit* Unit)
 {
 	SetAtvSkill(false);
-	CheckPassive(Unit);    // 패시브 전부 재적용
+	CheckPassive(Unit);
 }
 
 void UUBSkillManager::OnUnitHitDamage(AUBCombatUnit* Attacker, AUBCombatUnit* Victim, int32 Damage)

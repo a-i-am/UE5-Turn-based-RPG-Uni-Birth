@@ -17,7 +17,7 @@ class UNIBIRTH_API UUBBattleCharacterHP : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	virtual void NativeConstruct() override;// 위젯이 생성될 때 초기화하는 함수
+	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 public:
@@ -29,7 +29,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UProgressBar* HP_Progress;
-	
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UProgressBar* MP_Progress;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

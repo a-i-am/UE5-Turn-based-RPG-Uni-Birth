@@ -8,14 +8,14 @@
 #include "Common/UBdefine.h"
 #include "UBConsumable.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBConsumable : public UObject, public IUBItem
 {
 	GENERATED_BODY()
-	//인터페이스 구현
+
 public:
 	UFUNCTION()
 	UTexture2D* GetIcon_Implementation() const;
@@ -23,18 +23,18 @@ public:
 	virtual EEquipmentGrade GetItemGrade_Implementation() const override;
 public:
 	UPROPERTY(VisibleAnywhere)
-	int32 itemID; //아이템 ID
+	int32 itemID;
 
 	UPROPERTY(VisibleAnywhere)
-	FString name; //이름
+	FString name;
 	UPROPERTY(VisibleAnywhere)
-	FString icon; //아이콘
+	FString icon;
 	UPROPERTY(VisibleAnywhere)
-	int32 maxCount; //최대 소지 갯수
+	int32 maxCount;
 	UPROPERTY(VisibleAnywhere)
-	int32 maxUseCount; //사용 가능 횟수
+	int32 maxUseCount;
 	UPROPERTY(VisibleAnywhere)
-	int32 amount; //가지고 있는 갯수
+	int32 amount;
 	void Use();
 
 };

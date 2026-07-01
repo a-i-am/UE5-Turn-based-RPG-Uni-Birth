@@ -6,9 +6,9 @@
 #include "UI/Main/UBMainWidget.h"
 #include "UBCraftSlot.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCraftSlot : public UUBMainWidget
 {

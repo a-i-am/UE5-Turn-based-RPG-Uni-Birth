@@ -38,23 +38,23 @@ class UNIBIRTH_API AUBPlayer : public AUBCombatUnit
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+
 	AUBPlayer();
 	bool operator<(const AUBPlayer& other) const;
 
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
 	TObjectPtr<class USpringArmComponent> springArmComp;
 
@@ -92,10 +92,10 @@ public:
 
 	float AuccTime = 0.f;
 	FVector BaseOffset;
-	//UPROPERTY()
-	//int32 CurrentSkillIndex = -1;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	//TObjectPtr<USceneComponent> CameraPivot;
+
+
+
+
 
 	FVector OriginalCamLocation;
 	virtual void DeathCharacter() override;

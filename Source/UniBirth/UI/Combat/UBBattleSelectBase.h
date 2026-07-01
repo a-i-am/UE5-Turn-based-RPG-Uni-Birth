@@ -6,11 +6,11 @@
 #include "Blueprint/UserWidget.h"
 #include "UBBattleSelectBase.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
-class UNIBIRTH_API UUBBattleSelectBase : public UUserWidget 
+class UNIBIRTH_API UUBBattleSelectBase : public UUserWidget
 {
 	GENERATED_BODY()
 public:

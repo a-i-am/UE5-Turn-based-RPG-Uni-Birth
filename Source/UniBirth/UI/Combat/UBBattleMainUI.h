@@ -6,9 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "UBBattleMainUI.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBBattleMainUI : public UUserWidget
 {

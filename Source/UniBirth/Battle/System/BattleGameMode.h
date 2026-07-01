@@ -8,14 +8,14 @@
 #include "Common/UBdefine.h"
 #include "BattleGameMode.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API ABattleGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 protected:
 	virtual void BeginPlay() override;
 

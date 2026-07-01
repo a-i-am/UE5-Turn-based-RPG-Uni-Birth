@@ -1,4 +1,4 @@
-﻿#include "UBComboBuffComponent.h"
+#include "UBComboBuffComponent.h"
 #include "Engine/Engine.h"
 #include "Common/System/UBGameInstance.h"
 #include "Component/UBStatsComponent.h"
@@ -16,25 +16,25 @@ void UUBComboBuffComponent::InitializeComponent()
 
 	ComboRandomStream.GenerateNewSeed();
 
-	// GameInstance에 가면 ComboBuff Table 로드되어있다.
+
 	UUBGameInstance* GameInstance = GetWorld()->GetGameInstance<UUBGameInstance>();
 	if (GameInstance && GameInstance->ComboBuffData)
 	{
-		// 전체 모든 테이블을 읽어서, 재조립
+
 		TArray<FComboBuffData*> Rows;
 		GameInstance->ComboBuffData->GetAllRows(TEXT(""), Rows);
 
 		for (FComboBuffData* Iter : Rows)
 		{
 			FComboLevelData* ComboTypeData = comboDataMap.Find(Iter->Combo);
-			
+
 			if (ComboTypeData)
 			{
 				{
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelC;	// value
+					statInfo.value = Iter->LevelC;
 					statInfo.ID = Iter->ID;
 					ComboTypeData->levelMap[EComboLevel::C].statusCandidates.Add(statInfo);
 				}
@@ -42,7 +42,7 @@ void UUBComboBuffComponent::InitializeComponent()
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelB;	// value
+					statInfo.value = Iter->LevelB;
 					statInfo.ID = Iter->ID;
 					ComboTypeData->levelMap[EComboLevel::B].statusCandidates.Add(statInfo);
 				}
@@ -50,7 +50,7 @@ void UUBComboBuffComponent::InitializeComponent()
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelA;	// value
+					statInfo.value = Iter->LevelA;
 					statInfo.ID = Iter->ID;
 					ComboTypeData->levelMap[EComboLevel::A].statusCandidates.Add(statInfo);
 				}
@@ -59,13 +59,13 @@ void UUBComboBuffComponent::InitializeComponent()
 			{
 				FComboLevelData newLevelData;
 
-				// nullptr 은 한번도 추가한적 없다.
+
 				{
 					FComboStatusList statList;
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelC;	// value
+					statInfo.value = Iter->LevelC;
 					statInfo.ID = Iter->ID;
 					statList.statusCandidates.Add(statInfo);
 					newLevelData.levelMap.Add(EComboLevel::C, statList);
@@ -75,7 +75,7 @@ void UUBComboBuffComponent::InitializeComponent()
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelB;	// value
+					statInfo.value = Iter->LevelB;
 					statInfo.ID = Iter->ID;
 					statList.statusCandidates.Add(statInfo);
 					newLevelData.levelMap.Add(EComboLevel::B, statList);
@@ -85,7 +85,7 @@ void UUBComboBuffComponent::InitializeComponent()
 					FComboStatusInfo statInfo;
 					statInfo.statType = Iter->BuffStat;
 					statInfo.op = Iter->StatOperator;
-					statInfo.value = Iter->LevelA;	// value
+					statInfo.value = Iter->LevelA;
 					statInfo.ID = Iter->ID;
 					statList.statusCandidates.Add(statInfo);
 					newLevelData.levelMap.Add(EComboLevel::A, statList);
@@ -94,7 +94,7 @@ void UUBComboBuffComponent::InitializeComponent()
 				comboDataMap.Add(Iter->Combo, newLevelData);
 			}
 		}
-	
+
 		UUBBuffComponent* BuffComp = GetOwner()->GetComponentByClass<UUBBuffComponent>();
 		if (BuffComp)
 		{
@@ -129,7 +129,7 @@ void UUBComboBuffComponent::RequestAddComboBuff(EComboType InType)
 	}
 
 	UUBGameInstance* GI = GetWorld()->GetGameInstance<UUBGameInstance>();
-	
+
 	if (!allActiveBuffs.Contains(InType))
 	{
 		allActiveBuffs.Add(InType, TArray<FActiveBuff>());
@@ -161,20 +161,20 @@ void UUBComboBuffComponent::RequestAddComboBuff(EComboType InType)
 		return;
 	}
 
-	// 머지
+
 	int32 MergeTargetIndex = FindMergeTargetIndex(InType, EComboLevel::C);
 	if (MergeTargetIndex != -1)
 	{
 		RemoveActiveBuff(ActiveBuffs, MergeTargetIndex);
 		FActiveBuff FinalBuff = GetFinalMergedBuff(InType, EComboLevel::B);
 
-		// 추가될 버프는 머지된 결과인 최종 하나
+
 		ActiveBuffs.Add(FinalBuff);
 		ApplyToBuffComponent(FinalBuff);
 	}
 	else
 	{
-		// 머지가 아니라면 C등급 버프를 추가
+
 		if (ActiveBuffs.Num() < maxSlotCount)
 		{
 			FActiveBuff NewBuff = CreateActiveBuff(InType, EComboLevel::C);
@@ -198,7 +198,7 @@ int32 UUBComboBuffComponent::FindMergeTargetIndex(EComboType inType, EComboLevel
 		}
 	}
 
-	return -1; // 없음	
+	return -1;
 }
 
 FActiveBuff UUBComboBuffComponent::GetFinalMergedBuff(EComboType Type, EComboLevel Level)
@@ -209,7 +209,7 @@ FActiveBuff UUBComboBuffComponent::GetFinalMergedBuff(EComboType Type, EComboLev
 	{
 		TArray<FActiveBuff>& ActiveBuffs = allActiveBuffs[Type];
 		RemoveActiveBuff(ActiveBuffs, ExistIndex);
-		
+
 		return GetFinalMergedBuff(Type, (EComboLevel)((uint8)Level + 1));
 	}
 
@@ -221,13 +221,13 @@ FActiveBuff UUBComboBuffComponent::CreateActiveBuff(EComboType Type, EComboLevel
 	NewBuff.type = Type;
 	NewBuff.level = Level;
 
-	// 버프 타입과 레벨로 랜덤 스탯을 검색
+
 	FComboStatusInfo* NewStatus = GetRandomStatus(Type, Level);
 
-	// 검색되면
+
 	if (NewStatus)
 	{
-		// 추가될 버프에 스탯 타입과 ID를 적용 
+
 		NewBuff.stat = NewStatus->statType;
 		NewBuff.TableID = NewStatus->ID;
 		NewBuff.StatOp = NewStatus->op;
@@ -248,7 +248,7 @@ void UUBComboBuffComponent::ApplyToBuffComponent(const FActiveBuff& InBuff)
 		{
 			FBuffSlot NewSlot;
 			NewSlot.ID = InBuff.TableID;
-			
+
 			NewSlot.priority = EBuffPriority::SurvivalCombo;
 			NewSlot.CurrTurnCount = 0;
 			NewSlot.TurnDurationCount = TableData->TurnDurationCount;
@@ -280,16 +280,16 @@ void UUBComboBuffComponent::ApplyToBuffComponent(const FActiveBuff& InBuff)
 
 void UUBComboBuffComponent::ComboStatRateUpdate()
 {
-	// 콤보로 인한 스탯 배율 총합을 업데이트 
+
 	UUBStatsComponent* Stats = GetOwner()->GetComponentByClass<UUBStatsComponent>();
 	UUBBuffComponent* BuffComp = GetOwner()->GetComponentByClass<UUBBuffComponent>();
 	if (!Stats || !BuffComp)
 	{
 		return;
 	}
-	
+
 	FUBStats PreStats = Stats->currentStats;
-	//Stats->ResetComboStats();
+
 
 	for (auto& Elem : allActiveBuffs)
 	{
@@ -299,10 +299,10 @@ void UUBComboBuffComponent::ComboStatRateUpdate()
 
 		for (const FActiveBuff& Buff : Elem.Value)
 		{
-			// 특정 버프 스탯이 전체 콤보데이터 슬롯에 이미 있는지 확인 => 키로 저장
-			StatRepresentativeID.FindOrAdd(Buff.stat) = Buff.TableID; 
 
-			// 스탯 계산 방식에 따라 다른 맵에 저장
+			StatRepresentativeID.FindOrAdd(Buff.stat) = Buff.TableID;
+
+
 			if (Buff.StatOp == EStatOperator::Static)
 			{
 				FixedTotalMap.FindOrAdd(Buff.stat) += (int32)Buff.Value;
@@ -313,7 +313,7 @@ void UUBComboBuffComponent::ComboStatRateUpdate()
 			}
 		}
 
-		// 스탯 고정 값 적용 (기존 값에 레벨별 값이 그대로 더해지는 형태)
+
 		for (auto& Pair : FixedTotalMap)
 		{
 			EBuffStatType TargetStat = Pair.Key;
@@ -328,14 +328,14 @@ void UUBComboBuffComponent::ComboStatRateUpdate()
 				TempSlot.BuffStats.Add(TargetStat);
 				TempSlot.Values.Add((float)TotalFixed);
 				TempSlot.StatOperator = EStatOperator::Static;
-			
+
 				BuffComp->LogStatChange(GetOwner()->GetName(), TempSlot, PreStats, Stats->currentStats);
 				PreStats = Stats->currentStats;
 			}
 		}
 
-		// 스탯 비율 값 적용 (기존 값에 레벨별 값이 n.n 소수점(퍼센테이지) 비율 값으로 곱해진 후 기존값에 더해지는 형태)
-		// 예시) 10 += 10 * 0.5 = 15
+
+
 		for (auto& Pair : RateTotalMap)
 		{
 			EBuffStatType TargetStat = Pair.Key;
@@ -366,13 +366,13 @@ float UUBComboBuffComponent::GetComboTotalRate(EComboType ComboType)
 
 	if (BuffList == nullptr || BuffList->Num() == 0)
 	{
-		return 0.0f; // 버프가 없으면 0 반환
+		return 0.0f;
 	}
 
 	UUBGameInstance* GameInstance = GetWorld()->GetGameInstance<UUBGameInstance>();
 	if (!GameInstance || !GameInstance->ComboBuffData)
 	{
-		return 0.0f; // 콤보버프 데이터를 못 가져오면
+		return 0.0f;
 	}
 
 	for (const FActiveBuff& Buff : *BuffList)
@@ -397,7 +397,7 @@ float UUBComboBuffComponent::GetComboTotalRate(EComboType ComboType)
 	return TotalRate;
 }
 
-// 스테이터스 맵 내에서 랜덤 뽑기
+
 FComboStatusInfo* UUBComboBuffComponent::GetRandomStatus(EComboType inType, EComboLevel inLevel)
 {
 	if (comboDataMap.Contains(inType))
@@ -414,7 +414,7 @@ FComboStatusInfo* UUBComboBuffComponent::GetRandomStatus(EComboType inType, ECom
 		}
 	}
 
-	// 데이터가 없거나 실수했을 때 기본값 (혹은 Error Status)
+
 	return nullptr;
 }
 void UUBComboBuffComponent::RemoveActiveBuff(TArray<FActiveBuff>& BuffList, int32 Index)
@@ -426,7 +426,7 @@ void UUBComboBuffComponent::RemoveActiveBuff(TArray<FActiveBuff>& BuffList, int3
 		DeleteSlot.ID = BuffList[Index].TableID;
 		DeleteSlot.priority = EBuffPriority::SurvivalCombo;
 
-		// 정확한 삭제를 위해 아이콘 정보를 찾아 채워넣기.
+
 		UUBGameInstance* GameInstance = GetWorld()->GetGameInstance<UUBGameInstance>();
 		if (GameInstance && GameInstance->ComboBuffData)
 		{
@@ -453,7 +453,7 @@ void UUBComboBuffComponent::RemoveActiveBuff(TArray<FActiveBuff>& BuffList, int3
 		BuffComp->DeleteBuff(DeleteSlot);
 	}
 
-	// 기존 슬롯 1개를 제거하고, 합쳐진 버프 1개를 새로 추가
+
 	BuffList.RemoveAt(Index);
 }
 

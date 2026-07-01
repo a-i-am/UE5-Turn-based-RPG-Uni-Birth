@@ -17,11 +17,11 @@ class UNIBIRTH_API UHealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
+
 	UHealthComponent();
-	//초기 HP세팅
+
 	void Init(UUBStatsComponent* inStatComp);
-	void ApplyDamage(int32 damage, class AUBCombatUnit* target, const FCharacterActionFXOverride* ImpactFX, FVector ImpactScale, 
+	void ApplyDamage(int32 damage, class AUBCombatUnit* target, const FCharacterActionFXOverride* ImpactFX, FVector ImpactScale,
 		FRotator ImpactRotator, int32 hitCount);
 	bool bIsDead() const;
 	void SpawnParticle(AUBCombatUnit* target, const FCharacterActionFXOverride* ImpactFX, FVector ImpactScale, FRotator ImpactRotator);
@@ -30,11 +30,11 @@ public:
 	void SpawnGuardParticle(AUBCombatUnit* unit);
 
 protected:
-	// Called when the game starts
+
 	virtual void BeginPlay() override;
 
-	//DECLARE_MULTICAST_DELEGATE_TwoParams(FOnDead, AUBCombatUnit*);
-	//FOnDead OnDead;
+
+
 public:
 	UPROPERTY()
 	UUBStatsComponent* statComp;

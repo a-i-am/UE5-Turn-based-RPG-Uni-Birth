@@ -7,17 +7,17 @@
 #include "Common/UBdefine.h"
 #include "UBAIController.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API AUBAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
 public:
 	AUBAIController();
-	
+
 	UPROPERTY(BlueprintReadOnly, Category = "Boss|Phase")
 	EBossPhase currentPhase;
 
@@ -31,10 +31,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<class AUBCombatUnit> target;
 
-	
+
 	UPROPERTY()
-	TObjectPtr<class UBlackboardComponent> ownerBlackboard; 
-	
+	TObjectPtr<class UBlackboardComponent> ownerBlackboard;
+
 	virtual void OnPossess(APawn* pawn)  override;
 
 	void UpdateToTarget();

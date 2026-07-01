@@ -72,7 +72,7 @@ void UUBBattleCharacterHP::UpdateHPBar(float NewCurrentHP, float max)
 {
 
 	NewCurrentHP = FMath::Max(NewCurrentHP, 0.0f);
-	
+
 	if (IsValid(HP_Progress))
 	{
 		float barPercent = FMath::Clamp(NewCurrentHP / max, 0.0f, 1.0f);

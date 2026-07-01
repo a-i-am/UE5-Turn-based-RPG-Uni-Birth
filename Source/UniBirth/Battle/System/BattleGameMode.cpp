@@ -48,11 +48,11 @@ void ABattleGameMode::BeginPlay() {
     AUBBattleHUD* MyHUD = Cast<AUBBattleHUD>(PC->GetHUD());
     if (!MyHUD)
         return;
-    //if (ASampleCharacter* character = Cast<ASampleCharacter>(battleManager->currentCharacter))
-    //MyHUD->CharacterUI->ChangeOwner(character)
+
+
     battleManager->StartBattle();
     MyHUD->InitHUD();
-   
+
 }
 
 ABattleManager* ABattleGameMode::GetBattleManager()

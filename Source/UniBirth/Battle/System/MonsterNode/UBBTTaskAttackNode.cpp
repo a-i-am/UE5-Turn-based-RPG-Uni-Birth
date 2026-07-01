@@ -6,7 +6,7 @@
 #include "Character/Enemy/UBBaseMonster.h"
 #include "Character/UBPlayer.h"
 #include "BehaviorTree/BlackboardComponent.h"
-//#include "GameplayTags/UBGameplayTags.h
+
 UUBBTTaskAttackNode::UUBBTTaskAttackNode()
 {
     NodeName = "Attack";
@@ -16,7 +16,7 @@ EBTNodeResult::Type UUBBTTaskAttackNode::ExecuteTask(UBehaviorTreeComponent& Own
 {
     AUBAIController* AI = Cast<AUBAIController>(OwnerComp.GetAIOwner());
     if (!AI) return EBTNodeResult::Failed;
-  
+
     AUBBaseMonster* monster = Cast<AUBBaseMonster>(AI->GetPawn());
     if (!monster)return EBTNodeResult::Failed;
 
@@ -24,12 +24,12 @@ EBTNodeResult::Type UUBBTTaskAttackNode::ExecuteTask(UBehaviorTreeComponent& Own
 
     if (AgroTarget)
     {
-        //@TODO 어그로 수치에대한처리
+
 
     }
-    //타겟 갖고오는로직
+
     AUBCombatUnit* target = Cast<AUBCombatUnit>(BB->GetValueAsObject("Target"));
- 
+
     if (!target) return EBTNodeResult::Failed;
 
     monster->StartAttackSequence(lastActionTag, target);

@@ -30,21 +30,21 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 Defence;
-    //보호막
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 shield;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 speed; // 직접 타겟까지 가는 개체들에 적용(실제 전투에 유의미한 수치 X)
+    int32 speed;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 AttackSpeed; // 턴 가져오는 속도
+    int32 AttackSpeed;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float critRate;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float ResistRate;
- 
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 parryPoint;
 

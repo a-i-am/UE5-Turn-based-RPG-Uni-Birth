@@ -29,8 +29,8 @@ void UUBCharacterPortraitList::NativeConstruct()
     portraitlist.Add(CharacterPortrait_4);
     portraitlist.Add(CharacterPortrait_5);
     portraitlist.Add(CharacterPortrait_6);
-    //portraitlist.Add(CharacterPortrait_7);
-    //portraitlist.Add(CharacterPortrait_8);
+
+
 
     ReApplyAll();
 }

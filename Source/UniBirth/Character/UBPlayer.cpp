@@ -13,13 +13,13 @@
 AUBPlayer::AUBPlayer()
 {
 	teamType = ETeamType::Ally_Team;
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SprinArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
 	springArmComp->SetRelativeLocation(FVector(0.0f, 10.f, 70.f));
 	springArmComp->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
-	// °Å¸®
+
 	springArmComp->TargetArmLength = 150.f;
 	springArmComp->bUsePawnControlRotation = false;
 	springArmComp->bDoCollisionTest = false;
@@ -28,13 +28,13 @@ AUBPlayer::AUBPlayer()
 	camComp->SetRelativeLocation(FVector(-265.0f, 191.0f, 18.0f));
 	camComp->SetRelativeRotation(FQuat(FRotator(-0.3f, -2.0f, -4.f)));
 	camComp->SetupAttachment(springArmComp);
-	
+
 	UIPosition = CreateDefaultSubobject<USceneComponent>(TEXT("UIPosition"));
 	UIPosition->SetRelativeLocation(FVector(-140.0f, 14.0f, 19.0f));
 	UIPosition->SetRelativeRotation(FRotator(5.f, -120.0f, 5.0f));
 	UIPosition->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f));
 	UIPosition->SetupAttachment(RootComponent);
-	
+
 	comboBuffComp = CreateDefaultSubobject<UUBComboBuffComponent>(TEXT("ComboBuffComp"));
 
 	GunMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh_R"));
@@ -56,7 +56,7 @@ bool AUBPlayer::operator<(const AUBPlayer& other) const
 	return (statsComp->currentStats.AttackSpeed > other.statsComp->currentStats.Attack);
 }
 
-// Called when the game starts or when spawned
+
 void AUBPlayer::BeginPlay()
 {
 	Super::BeginPlay();
@@ -95,16 +95,16 @@ void AUBPlayer::BeginPlay()
 					}
 					break;
 				}
-				
+
 			}
-			
+
 		}
 	}
 }
 
 void AUBPlayer::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime); 
+	Super::Tick(DeltaTime);
 
 }
 
@@ -128,9 +128,9 @@ void AUBPlayer::TOggleWeaponRotator()
 		{
 			GunMesh_R->SetRelativeRotation(
 				FRotator(
-					-90.f, 
-					0.f,   
-					20.f   
+					-90.f,
+					0.f,
+					20.f
 				));
 		}
 		else
@@ -171,7 +171,7 @@ void AUBPlayer::EndStealth()
 
 void AUBPlayer::StartStealth()
 {
-	
+
 	statsComp->currentStats.CurrState.Add(EUnitState::Stealth);
 	statsComp->currentStats.critRate = 1.0f;
 	SetStealthOpacity(0.35f);

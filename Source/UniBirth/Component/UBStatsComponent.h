@@ -14,21 +14,21 @@ class UNIBIRTH_API UUBStatsComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
+
 	UUBStatsComponent();
 
 protected:
-	// Called when the game starts
+
 	virtual void BeginPlay() override;
 
 	void LogCurrentStats(const FString& Prefix);
 
 public:
-	// Called every frame
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void ApplyComboStatByType(EBuffStatType StatType, int32 Value, float Rate);
-	
+
 	void ApplyHPheal(int32 value, float rate);
 	void ApplyMaxMP(int32 value, float rate);
 	void ApplyMPHeal(int32 value, float rate);
@@ -47,7 +47,7 @@ public:
 	void InitStats(ECharacterType type);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	FUBStats stats;	// ÃÊ±â ½ºÅÈ°ª
+	FUBStats stats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FUBStats currentStats;
@@ -70,7 +70,7 @@ private:
 			targetStatValue += value;
 		}
 	}
-	
+
 
 public:
 	FOnDodgeStatChanged OnAddDodgeStat;

@@ -8,5 +8,5 @@ void AUBGameStateBase::SetGameStart()
 		bIsGameStart = true;
 		if(bAllowPlayerUI == true)
 		OnGameStart.Broadcast();
-	
+
 }

@@ -6,9 +6,9 @@
 #include "GameFramework/HUD.h"
 #include "UBBattleHUD.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API AUBBattleHUD : public AHUD
 {
@@ -25,7 +25,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UUserWidget> MainUIWidget;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<class AUBCharacterUI> CharacterUIClass;
 
@@ -35,11 +35,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	AUBCharacterUI* CharacterUIActor;
 
-	/*UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UUserWidget> ScreenGuardWidgetClass;
 
-	UPROPERTY(BlueprintReadOnly)
-	UUserWidget* ScreenGuardWidget;*/
+
+
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> MonsterHPClass;

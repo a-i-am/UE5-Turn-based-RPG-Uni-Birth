@@ -21,9 +21,9 @@ void UUBCharacterSelectCheckBox::NativeConstruct()
     if (Checkbox_Tau)
         Checkbox_Tau->OnCheckStateChanged.AddDynamic(this, &UUBCharacterSelectCheckBox::CheckCharacterList);
 
-    
+
     InitCheckBox();
-    
+
 }
 
 

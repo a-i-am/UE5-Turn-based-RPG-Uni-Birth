@@ -2,7 +2,7 @@
 
 #pragma once
 #include "CoreMinimal.h"
-#include "FBossPhaseEffect.generated.h"  
+#include "FBossPhaseEffect.generated.h"
 USTRUCT(BlueprintType)
 struct FBossPhaseEffect
 {

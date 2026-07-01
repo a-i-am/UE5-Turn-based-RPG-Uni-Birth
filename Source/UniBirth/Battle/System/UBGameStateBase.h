@@ -6,17 +6,17 @@
 #include "GameFramework/GameStateBase.h"
 #include "UBGameStateBase.generated.h"
 
-/**
- * 
- */
+
+
+
 DECLARE_MULTICAST_DELEGATE(FOnGameStart)
 UCLASS()
 class UNIBIRTH_API AUBGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
-	
+
 public:
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetGameStart();
 

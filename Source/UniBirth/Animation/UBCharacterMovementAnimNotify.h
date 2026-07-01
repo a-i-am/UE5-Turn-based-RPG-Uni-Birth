@@ -6,9 +6,9 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "UBCharacterMovementAnimNotify.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBCharacterMovementAnimNotify : public UAnimNotifyState
 {

@@ -6,9 +6,9 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "UBChangePhaseTaskNode.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBChangePhaseTaskNode : public UBTTaskNode
 {
@@ -21,7 +21,7 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	TObjectPtr<class ULevelSequence> Sequence;
 
-	
+
 
 	void HandleCutsceneFinished(UBehaviorTreeComponent* OwnerComp);
 

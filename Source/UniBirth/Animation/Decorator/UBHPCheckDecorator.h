@@ -7,9 +7,9 @@
 #include "Common/UBdefine.h"
 #include "UBHPCheckDecorator.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBHPCheckDecorator : public UBTDecorator
 {

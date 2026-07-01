@@ -31,10 +31,10 @@ void UUBBattleMonsterHP::NativeConstruct()
 			return;
 		}
 	}
-	
+
 	UUBGameInstance* gameinstance = Cast< UUBGameInstance>(GetGameInstance());
 
-	if (!gameinstance) 
+	if (!gameinstance)
 	{
 		return;
 	}

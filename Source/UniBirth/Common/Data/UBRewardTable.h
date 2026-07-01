@@ -21,12 +21,12 @@ struct FRewardStruct : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 RandomWeight;
 };
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBRewardTable : public UDataAsset
 {
 	GENERATED_BODY()
-	
+
 };

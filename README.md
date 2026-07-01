@@ -1,17 +1,50 @@
-# UE5-Turn-based-RPG-Uni-Birth
+# Uni Birth
 
-[첨부 이미지 원본 파일]
-[UniBirth.pdf](https://github.com/user-attachments/files/25696755/UniBirth.pdf)
+[프로젝트 PDF](docs/UniBirth.pdf)
 
-<img width="1701" height="945" alt="슬라이드1" src="https://github.com/user-attachments/assets/b2c0ceac-1579-4151-94a5-5621feaaa896" />
-<img width="1701" height="945" alt="슬라이드2" src="https://github.com/user-attachments/assets/26ee124a-1abe-43ef-a8c9-c4e742ac4e00" />
-<img width="1701" height="945" alt="슬라이드3" src="https://github.com/user-attachments/assets/2cff1fa9-08e2-4527-8b4d-2faee6c5b5a4" />
-<img width="1701" height="945" alt="슬라이드4" src="https://github.com/user-attachments/assets/724bca6b-12c3-47e6-b491-5eb32ddda6bc" />
-<img width="1701" height="945" alt="슬라이드5" src="https://github.com/user-attachments/assets/b624762a-dac2-4c23-b00f-0d5275f5acac" />
-<img width="1701" height="945" alt="슬라이드6" src="https://github.com/user-attachments/assets/32e490a5-d131-4e81-84aa-60e75fee1ca7" />
-<img width="1701" height="945" alt="슬라이드7" src="https://github.com/user-attachments/assets/4501a201-53e4-4463-b5e3-f2e0057d6df3" />
-<img width="1701" height="945" alt="슬라이드8" src="https://github.com/user-attachments/assets/7ffafdb8-715a-44ec-9545-bcd13e6adb57" />
-<img width="1701" height="945" alt="슬라이드9" src="https://github.com/user-attachments/assets/0835865c-25cf-4b19-b9fe-3af86ffbfb0e" />
-<img width="1701" height="945" alt="슬라이드10" src="https://github.com/user-attachments/assets/64171131-419c-4772-9b23-3973afe0bd98" />
-<img width="1701" height="945" alt="슬라이드11" src="https://github.com/user-attachments/assets/a05bc1a3-82d3-4754-ad5e-fb20f2bb1c9f" />
-<img width="1701" height="945" alt="슬라이드12" src="https://github.com/user-attachments/assets/870fe8d1-6293-4873-82f8-44d84623ba49" />
+> 이 저장소는 포트폴리오용 C++ 소스 아카이브입니다. 원본 Content와 `.uproject`가 없어 단독 실행할 수 없습니다.
+
+'클레르 옵스큐어: 33원정대(Clair Obscur: Expedition 33)'의 실시간 방어 및 반응형 전투 시스템을 모티브로 개발한 Unreal Engine 5 기반 턴제 RPG 팀 프로젝트입니다.
+
+README 업데이트: 2026-07-01
+
+> 📷 **영상 및 이미지**
+> *(여기에 영상 또는 이미지 추가 예정)*
+
+### 프로젝트 정보
+
+| 항목 | 내용 |
+| --- | --- |
+| 개발 기간 | 2025-10 - 2025-12 |
+| 리팩터링 이력 | (진행 시 추가 예정) |
+| 인원 | 기획 5인, 아트 5인, 개발 3인 |
+| 엔진 | Unreal Engine 5.5.4 |
+| 협업 | TortoiseSVN, Notion, Discord |
+
+### 기술 스택
+<p>
+  <img src="https://img.shields.io/badge/Unreal Engine 5-0E1128?style=flat-square&logo=unreal-engine&logoColor=white"/>
+  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat-square&logo=c%2B%2B&logoColor=white"/>
+  <img src="https://img.shields.io/badge/UMG-000000?style=flat-square"/>
+</p>
+
+### 프로젝트 구조
+```text
+(프로젝트 구조도 추가 예정)
+```
+
+### 플레이 및 조작 방법
+*(캐릭터 전투 진입, 회피/패링 입력 키 및 스킬 활용법 작성 예정)*
+
+### 담당 작업
+
+- 플레이어 회피·패링 QTE 시스템 로직 설계
+- 스킬 버프와 디버프 적용 및 해제 구현
+- 동일 등급 버프의 연쇄 합성 시스템
+- 콤보 성공·실패와 버프 슬롯 상태 동기화
+- 데이터 테이블(CSV) 기반 QTE 및 스탯 수치 연동
+
+### 업데이트 계획
+
+- 회피, 패링, 콤보 버프 시연 영상 링크 추가 (썸네일 포함)
+- 사용한 에셋 출처 표기 예정

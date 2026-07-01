@@ -8,12 +8,12 @@ void UUBBattleSelectBase::CloseWidget()
 {
 
 	if (AUBBattleHUD* HUD = Cast<AUBBattleHUD>(GetWorld()->GetFirstPlayerController()->GetHUD()))
-	{	
+	{
 		this->SetVisibility(ESlateVisibility::Collapsed);
 		if (HUD->CurrentWidget == this) {
 			HUD->CurrentWidget = nullptr;
-			
+
 		}
-		
+
 	}
 }

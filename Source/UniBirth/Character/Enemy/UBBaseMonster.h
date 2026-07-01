@@ -41,8 +41,8 @@ public:
 	void MonsterOnActionFinished();
 	void NotifyAttackIntent();
 
-	//UFUNCTION(BlueprintCallable, BlueprintPure)
-	//EActionState GetActionState() const { return currentState; }
+
+
 
 
 
@@ -70,7 +70,7 @@ public:
 	TArray<AUBCombatUnit*> ResolvedTargets;
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	const TArray<AUBCombatUnit*>& GetResolvedTargets() const { return ResolvedTargets; }
-	
+
 	FGameplayTag CurrentActionTag;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -78,7 +78,7 @@ public:
 
 	bool bIsAttack = false;
 
-	
+
 	FVector MoveTargetLocation;
 	FRotator OriginRotator;
 	FRotator TargetRotator;
@@ -89,7 +89,7 @@ public:
 
 	FOnActionFinished OnActionFinishedDelegate;
 	void HandleShieldBroken();
-	
+
 	bool bIsPlay = false;
 
 
@@ -102,8 +102,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Boss|Phase")
 	TMap<EBossPhase, FBossPhaseEffect> PhaseEffectMap;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-	//TObjectPtr<USceneComponent> CameraPivot;
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UBehaviorTree> BehaviorTree;
@@ -116,7 +116,7 @@ public:
 	bool bisRefill = false;
 	UFUNCTION(BlueprintCallable)
 	 void SheildRefill();
-	
+
 
 	virtual void DeathCharacter() override;
 

@@ -15,12 +15,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Action")
     FGameplayTag ActionTag;
 
-    /*UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Action")
-    UAnimMontage* Montage;*/
 
-  /*  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Action")
-    float Damage = 0.f;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Action")
-    float Cooldown = 0.f;*/
+
+
+
+
+
+
 };

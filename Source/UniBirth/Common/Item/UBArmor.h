@@ -6,9 +6,9 @@
 #include "Common/Item/UBEquipment.h"
 #include "UBArmor.generated.h"
 
-/**
- * 
- */
+
+
+
 UCLASS()
 class UNIBIRTH_API UUBArmor : public UUBEquipment
 {

@@ -10,7 +10,7 @@
 #include "Components/CanvasPanelSlot.h"
 
 void UUBInventorySlot::InitSlot() {
-	//인벤토리에서 인덱스에 있는 아이템 불러와서 아이콘 등록하기
+
 	if (itemicon == nullptr)
 		return;
 	UUBInventorySubsystem* inventorysubsystem = UGameInstance::GetSubsystem<UUBInventorySubsystem>(GetWorld()->GetGameInstance());
@@ -25,7 +25,7 @@ void UUBInventorySlot::InitSlot() {
 	else {
 		item = *tempitem;
 	}
-	
+
 
 	UTexture2D* icon = IUBItem::Execute_GetIcon(item.GetObject());
 	if (icon == nullptr)
@@ -33,7 +33,7 @@ void UUBInventorySlot::InitSlot() {
 		itemicon->SetBrushFromTexture(nullptr);
 		return;
 	}
-	
+
 	itemicon->SetBrushFromTexture(icon);
 }
 
@@ -42,7 +42,7 @@ FReply UUBInventorySlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	FEventReply Reply;
 	Reply.NativeReply = Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-	// 좌클릭 입력이 들어온 경우
+
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
 	{
 		if (item.GetObject() !=nullptr)
@@ -60,25 +60,25 @@ void UUBInventorySlot::NativeOnDragDetected(const FGeometry& InGeometry, const F
 
 	if (OutOperation == nullptr)
 	{
-		// 드래그 슬롯을 생성합니다.
+
 		UUBInventoryDrag* Operation = NewObject<UUBInventoryDrag>();
 		OutOperation = Operation;
 
-		// 슬롯과 슬롯 타입을 지정합니다.
+
 		Operation->index = slotindex;
 		Operation->icon = IUBItem::Execute_GetIcon(item.GetObject());
 
-		// Drag 위젯을 생성합니다.
+
 		if (DragWidgetClass)
 		{
 			UUBInventorySlot* DragWidget = CreateWidget<UUBInventorySlot>(GetWorld(), DragWidgetClass);
 			if (DragWidget)
 			{
-				// 생성된 위젯을 초기화해줍니다.
+
 				DragWidget->slotindex = slotindex;
 				DragWidget->InitSlot();
 
-				// 드래그 슬롯의 드래그 위젯을 설정합니다.
+
 				Operation->DefaultDragVisual = DragWidget;
 			}
 		}

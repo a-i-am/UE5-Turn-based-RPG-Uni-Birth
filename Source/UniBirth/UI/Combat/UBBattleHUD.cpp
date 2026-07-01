@@ -17,9 +17,9 @@ AUBBattleHUD::AUBBattleHUD()
 
 void AUBBattleHUD::BeginPlay() {
 	Super::BeginPlay();
-    //게임모드에서 호출
-    //InitHUD();
-    
+
+
+
 }
 
 void AUBBattleHUD::OnTimeDelayEnded_Internal()

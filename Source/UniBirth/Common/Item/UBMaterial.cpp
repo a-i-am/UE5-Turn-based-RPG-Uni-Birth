@@ -10,11 +10,11 @@ UTexture2D* UUBMaterial::GetIcon_Implementation() const
 		return nullptr;
 	}
 
-	// 아이콘들이 모여있는 공통 폴더
+
 	const FString BasePath = TEXT("/Game/Assets/Texture/UI/Icon/");
 
-	// Object Path 생성
-	// /Game/UI/Icons/Sword_Icon.Sword_Icon
+
+
 	const FString FullPath = BasePath + icon + TEXT(".") + icon;
 
 	UTexture2D* Texture = LoadObject<UTexture2D>(
