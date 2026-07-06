@@ -6,7 +6,16 @@
 
 '클레르 옵스큐어: 33원정대(Clair Obscur: Expedition 33)'의 실시간 방어 및 반응형 전투 시스템을 모티브로 개발한 Unreal Engine 5 기반 턴제 RPG 팀 프로젝트입니다.
 
-README 업데이트: 2026-07-01
+### 프로젝트 상태
+
+현재 리팩터링과 추가 버그 수정은 개발 환경 문제로 보류 중입니다. 프로젝트는 인하대학교 미래인재개발원 데스크탑 PC에서 개발했으며, 현재 개인 장비(MSI GF63 Thin 9SC, Intel Core i7 9세대)에서는 Unreal Engine 작업 중 그래픽 드라이버 손상 문제가 발생했습니다. 안정적인 개발 환경과 원본 프로젝트 파일을 확보하기 전까지 추가 개발이 어렵습니다.
+
+README 업데이트: 2026-07-06
+
+### 실행 빌드
+
+- [Windows 디버그 메시지 비표시 빌드](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/tag/debug-free-build-v1)
+- 압축 해제 후 `Windows/UniBirth.exe` 실행
 
 > 📷 **영상 및 이미지**
 > *(여기에 영상 또는 이미지 추가 예정)*
@@ -16,7 +25,7 @@ README 업데이트: 2026-07-01
 | 항목 | 내용 |
 | --- | --- |
 | 개발 기간 | 2025-10 - 2025-12 |
-| 리팩터링 이력 | (진행 시 추가 예정) |
+| 리팩터링 상태 | 개발 환경 문제로 보류 |
 | 인원 | 기획 5인, 아트 5인, 개발 3인 |
 | 엔진 | Unreal Engine 5.5.4 |
 | 협업 | TortoiseSVN, Notion, Discord |
