@@ -17,8 +17,12 @@ README 업데이트: 2026-07-06
 - [Windows 디버그 메시지 비표시 빌드](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/tag/debug-free-build-v1)
 - 압축 해제 후 `Windows/UniBirth.exe` 실행
 
-> 📷 **영상 및 이미지**
-> *(여기에 영상 또는 이미지 추가 예정)*
+### 영상
+
+- [포트폴리오 소개 영상](videos/UniBirth-portfolio-overview-no-captions.mp4)
+  전투, 탐색, UI 흐름을 중심으로 Uni Birth의 전체 플레이 분위기를 정리한 영상입니다.
+- [기능 흐름 시연 영상](videos/UniBirth-feature-flow-no-captions.mp4)
+  보상 획득, 인벤토리 조작/착용, 드론 착용 후 바실리스크 전투, 분해·조합 흐름을 보여줍니다.
 
 ### 프로젝트 정보
 
@@ -55,5 +59,4 @@ README 업데이트: 2026-07-06
 
 ### 업데이트 계획
 
-- 회피, 패링, 콤보 버프 시연 영상 링크 추가 (썸네일 포함)
 - 사용한 에셋 출처 표기 예정
