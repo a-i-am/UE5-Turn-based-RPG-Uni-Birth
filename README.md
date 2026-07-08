@@ -19,10 +19,12 @@ README 업데이트: 2026-07-06
 
 ### 영상
 
-- [포트폴리오 소개 영상](videos/UniBirth-portfolio-overview-no-captions.mp4)
-  전투, 탐색, UI 흐름을 중심으로 Uni Birth의 전체 플레이 분위기를 정리한 영상입니다.
-- [기능 흐름 시연 영상](videos/UniBirth-feature-flow-no-captions.mp4)
-  보상 획득, 인벤토리 조작/착용, 드론 착용 후 바실리스크 전투, 분해·조합 흐름을 보여줍니다.
+| 포트폴리오 소개 영상 | 기능 흐름 시연 영상 |
+| --- | --- |
+| [![포트폴리오 소개 영상](images/portfolio-overview-preview.jpg)](videos/UniBirth-portfolio-overview-no-captions.mp4?raw=1) | [![기능 흐름 시연 영상](images/feature-flow-preview.jpg)](videos/UniBirth-feature-flow-no-captions.mp4?raw=1) |
+| 전투, 탐색, UI 흐름을 중심으로 Uni Birth의 전체 플레이 분위기를 정리한 영상입니다. | 보상 획득, 인벤토리 조작/착용, 드론 착용 후 바실리스크 전투, 분해·조합 흐름을 보여줍니다. |
+
+GitHub에서 큰 MP4 파일은 미리보기가 제한될 수 있습니다. 썸네일을 클릭하면 원본 영상을 재생하거나 다운로드할 수 있습니다.
 
 ### 프로젝트 정보
 
