@@ -1,6 +1,6 @@
 # Videos
 
-GitHub may not preview large MP4 files on the file page. Use the Release links below for stable playback or download.
+GitHub may not preview large MP4 files on the file page. Use the Release links below for stable playback or download. Depending on your browser settings, clicking a video link may download the file immediately.
 
 | Video | Description |
 | --- | --- |

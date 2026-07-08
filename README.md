@@ -24,7 +24,7 @@ README 업데이트: 2026-07-06
 | [![포트폴리오 소개 영상](images/portfolio-overview-preview.jpg)](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/download/portfolio-videos-v1/UniBirth-portfolio-overview-no-captions.mp4) | [![기능 흐름 시연 영상](images/feature-flow-preview.jpg)](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/download/portfolio-videos-v1/UniBirth-feature-flow-no-captions.mp4) |
 | 전투, 탐색, UI 흐름을 중심으로 Uni Birth의 전체 플레이 분위기를 정리한 영상입니다. | 보상 획득, 인벤토리 조작/착용, 드론 착용 후 바실리스크 전투, 분해·조합 흐름을 보여줍니다. |
 
-GitHub에서 큰 MP4 파일은 미리보기가 제한될 수 있어, 영상은 [Release asset](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/tag/portfolio-videos-v1)으로 제공합니다.
+GitHub에서 큰 MP4 파일은 미리보기가 제한될 수 있어, 영상은 [Release asset](https://github.com/a-i-am/UE5-Turn-based-RPG-Uni-Birth/releases/tag/portfolio-videos-v1)으로 제공합니다. 썸네일을 클릭하면 브라우저 설정에 따라 영상이 바로 재생되거나 다운로드됩니다.
 
 ### 프로젝트 정보
 
