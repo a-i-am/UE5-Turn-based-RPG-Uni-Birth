@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Character/Enemy/UBBaseMonster.h"
 #include "Component/ActionSystemComponent.h"
 #include "Battle/System/UBAIController.h"
@@ -16,34 +13,30 @@
 #include "Component/UBComboBuffComponent.h"
 #include "Component/UBBuffComponent.h"
 
-
 AUBBaseMonster::AUBBaseMonster()
 {
-
-	teamType = ETeamType::Enemy_Team;
+	teamType = ETeamType::Enemy;
 	PrimaryActorTick.bCanEverTick = true;
 
 	AIControllerClass = AUBAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 }
+
 void AUBBaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	currentState = EActionState::idle;
+	currentState = EActionState::Idle;
 	OriginalLocation = GetActorLocation();
 	HealthComp->OnShieldDestroy.AddUObject(this, &AUBBaseMonster::HandleShieldBroken);
 }
-
 
 void AUBBaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-
-void AUBBaseMonster::startAttack()
+void AUBBaseMonster::StartAttack()
 {
 	currentState = EActionState::Attack;
 	asComp = this->FindComponentByClass<UActionSystemComponent>();
@@ -63,19 +56,17 @@ void AUBBaseMonster::NotifyAttackIntent()
 	if (bm) bm->OnMonsterAttackStarted.Broadcast(CurrentTarget, CurrentSkillData);
 }
 
-
 void AUBBaseMonster::AttackHit()
 {
-
 	result = bm->GetReactionResult();
 
-	const FCharacterActionFXOverride* hitFX = nullptr;
+	const FCharacterActionFXOverride* HitFX = nullptr;
 	if (FXProfile)
 	{
-		hitFX = FXProfile->Find(CurrentActionTag);
+		HitFX = FXProfile->Find(CurrentActionTag);
 	}
 
-	bm->HandleMonsterAttackResult(this,ResolvedTargets.Num() > 0 ? ResolvedTargets[0] : nullptr,result);
+	bm->HandleMonsterAttackResult(this, ResolvedTargets.Num() > 0 ? ResolvedTargets[0] : nullptr, result);
 
 	for (AUBCombatUnit* Target : ResolvedTargets)
 	{
@@ -94,13 +85,12 @@ void AUBBaseMonster::AttackHit()
 			continue;
 		}
 
-
-		AUBPlayer* player = Cast<AUBPlayer>(Target);
-		if (player)
+		AUBPlayer* PlayerUnit = Cast<AUBPlayer>(Target);
+		if (PlayerUnit)
 		{
-			player->BuffComp->DeleteBuffByReason(EDelCase::SkillHit);
+			PlayerUnit->BuffComp->DeleteBuffByReason(EDelCase::SkillHit);
 		}
-		HealthComp->ApplyDamage(FinalDamage, Target, hitFX, hitFX->ImpactScale, hitFX->ImpactRotator, CurrentSkillData->hitCount);
+		HealthComp->ApplyDamage(FinalDamage, Target, HitFX, HitFX->ImpactScale, HitFX->ImpactRotator, CurrentSkillData->hitCount);
 
 		if (FinalDamage > 0 && !Target->bIsDead())
 		{
@@ -109,8 +99,6 @@ void AUBBaseMonster::AttackHit()
 				UUBSkillManager* SM = GI->GetSubsystem<UUBSkillManager>();
 				if (SM)
 				{
-
-
 					SM->OnUnitHitDamage(this, Target, FinalDamage);
 				}
 			}
@@ -118,21 +106,20 @@ void AUBBaseMonster::AttackHit()
 	}
 }
 
-void AUBBaseMonster::StartAttackSequence(FGameplayTag ActionTag, AUBCombatUnit* target)
+void AUBBaseMonster::StartAttackSequence(FGameplayTag InActionTag, AUBCombatUnit* InTargetUnit)
 {
-	if (!target || target->bIsDead())
+	if (!InTargetUnit || InTargetUnit->bIsDead())
 	{
 		return;
 	}
-	CurrentActionTag = ActionTag;
-	CurrentTarget = target;
-	CurrentSkillData = ResolveSkillDataFromActionTag(ActionTag);
+	CurrentActionTag = InActionTag;
+	CurrentTarget = InTargetUnit;
+	CurrentSkillData = ResolveSkillDataFromActionTag(InActionTag);
 
-	if (CurrentSkillData == nullptr)return;
+	if (CurrentSkillData == nullptr) return;
 
-	SkillManager->RequestSkillUse(this, CurrentSkillData->skill_key, target);
+	SkillManager->RequestSkillUse(this, CurrentSkillData->skill_key, InTargetUnit);
 	ResolveTargetsFromSkill();
-
 
 	if (CurrentSkillData->AttackType == 1)
 	{
@@ -140,11 +127,10 @@ void AUBBaseMonster::StartAttackSequence(FGameplayTag ActionTag, AUBCombatUnit* 
 	}
 	else
 	{
-		startAttack();
+		StartAttack();
 	}
-
-
 }
+
 void AUBBaseMonster::StartMove()
 {
 	currentState = EActionState::MovingToTarget;
@@ -165,28 +151,28 @@ void AUBBaseMonster::AllPlayerIdle()
 	{
 		if (Target)
 		{
-			if(Target->bIsDead() == false)
-			Target->currentState = EActionState::idle;
+			if (Target->bIsDead() == false)
+				Target->currentState = EActionState::Idle;
 		}
 	}
 }
 
 void AUBBaseMonster::MoveToTarget()
 {
-	float  DeltaTime = GetWorld()->GetDeltaSeconds();
-	FVector curr = GetActorLocation();
-	FVector Dir = (MoveTargetLocation - curr).GetSafeNormal();
+	float DeltaTime = GetWorld()->GetDeltaSeconds();
+	FVector Curr = GetActorLocation();
+	FVector Dir = (MoveTargetLocation - Curr).GetSafeNormal();
 
-	FVector Next = curr + (Dir * statsComp->currentStats.speed * DeltaTime);
+	FVector Next = Curr + (Dir * statsComp->currentStats.speed * DeltaTime);
 	SetActorLocation(Next);
 
 	if (FVector::Dist(Next, MoveTargetLocation) <= 400.0f)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(MovementTimerHandle);
-		startAttack();
+		StartAttack();
 	}
-
 }
+
 void AUBBaseMonster::MonsterOnActionFinished()
 {
 	if (this->bIsDeath == true)
@@ -194,42 +180,42 @@ void AUBBaseMonster::MonsterOnActionFinished()
 		return;
 	}
 
-	AUBPlayer* player = Cast<AUBPlayer>(CurrentTarget);
-	if (!player)
+	AUBPlayer* PlayerUnit = Cast<AUBPlayer>(CurrentTarget);
+	if (!PlayerUnit)
 	{
 		return;
 	}
 
 	switch (CurrentTarget->currentState)
 	{
-		case EActionState::Guard:
-				player->comboBuffComp->RequestAddComboBuff(EComboType::GUARD);
-			break;
-		case EActionState::Dodge:
-			if (result == EResultType::Success)
-			{
-				player->comboBuffComp->RequestAddComboBuff(EComboType::DODGE);
-			}
-			else if (result == EResultType::Fail)
-			{
-				player->comboBuffComp->ResetBuffs(EComboType::DODGE, EDelCase::ComboFailure);
-			}
-			break;
-		case EActionState::Parry:
-			if (result == EResultType::Success)
-			{
-				player->comboBuffComp->RequestAddComboBuff(EComboType::PARRY);
-			}
-			else if (result == EResultType::Fail)
-			{
-				player->comboBuffComp->ResetBuffs(EComboType::PARRY, EDelCase::ComboFailure);
-			}
-			break;
+	case EActionState::Guard:
+		PlayerUnit->ComboBuffComponent->RequestAddComboBuff(EComboType::Guard);
+		break;
+	case EActionState::Dodge:
+		if (result == EResultType::Success)
+		{
+			PlayerUnit->ComboBuffComponent->RequestAddComboBuff(EComboType::Dodge);
+		}
+		else if (result == EResultType::Fail)
+		{
+			PlayerUnit->ComboBuffComponent->ResetBuffs(EComboType::Dodge, EDelCase::ComboFailure);
+		}
+		break;
+	case EActionState::Parry:
+		if (result == EResultType::Success)
+		{
+			PlayerUnit->ComboBuffComponent->RequestAddComboBuff(EComboType::Parry);
+		}
+		else if (result == EResultType::Fail)
+		{
+			PlayerUnit->ComboBuffComponent->ResetBuffs(EComboType::Parry, EDelCase::ComboFailure);
+		}
+		break;
 	}
 
 	CurrentTarget->result = EResultType::None;
 
-	if (monsterType == EMonsterType::Melee)
+	if (MonsterType == EMonsterType::Melee)
 	{
 		StartReturnMove();
 	}
@@ -237,7 +223,6 @@ void AUBBaseMonster::MonsterOnActionFinished()
 	{
 		StartRotateMeshToOrigin();
 	}
-
 }
 
 void AUBBaseMonster::StartReturnMove()
@@ -254,12 +239,12 @@ void AUBBaseMonster::StartReturnMove()
 
 void AUBBaseMonster::BeforeLocation()
 {
-	float deltaTime = GetWorld()->GetDeltaSeconds();
+	float DeltaTime = GetWorld()->GetDeltaSeconds();
 
 	FVector Curr = GetActorLocation();
-	FVector dir = (OriginalLocation - Curr).GetSafeNormal();
+	FVector Dir = (OriginalLocation - Curr).GetSafeNormal();
 
-	FVector Next = Curr + (dir * statsComp->currentStats.speed * deltaTime);
+	FVector Next = Curr + (Dir * statsComp->currentStats.speed * DeltaTime);
 	SetActorLocation(Next);
 
 	if (FVector::DistSquared(Next, OriginalLocation) <= 25.0f)
@@ -270,7 +255,7 @@ void AUBBaseMonster::BeforeLocation()
 	}
 }
 
-void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* Target)
+void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* InTargetUnit)
 {
 	OriginalLocation = GetActorLocation();
 	OriginRotator = GetMesh()->GetRelativeRotation();
@@ -278,7 +263,7 @@ void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* Target)
 	GetWorld()->GetTimerManager().ClearTimer(RotateTimerHandle);
 
 	FVector From = GetActorLocation();
-	FVector To = Target->GetActorLocation();
+	FVector To = InTargetUnit->GetActorLocation();
 
 	FVector Dir = To - From;
 	Dir.Z = 0;
@@ -297,53 +282,51 @@ void AUBBaseMonster::StartRotateToTarget(AUBCombatUnit* Target)
 
 void AUBBaseMonster::RotateTickToTarget()
 {
-	InterpRotateTo(TargetRotator, rotateSpeed, RotateTimerHandle);
+	InterpRotateTo(TargetRotator, RotateSpeed, RotateTimerHandle);
 }
+
 void AUBBaseMonster::RotateTickToOrigin()
 {
-	InterpRotateTo(OriginRotator, rotateSpeed, RotatoeToOrginTimerHandle);
+	InterpRotateTo(OriginRotator, RotateSpeed, RotateToOriginTimerHandle);
 	if (result == EResultType::Success)
 	{
-		for (AUBCombatUnit* Player : ResolvedTargets)
+		for (AUBCombatUnit* PlayerUnit : ResolvedTargets)
 		{
-			if (Player->currentState == EActionState::Parry)
+			if (PlayerUnit->currentState == EActionState::Parry)
 			{
-				Player->Counter(this);
+				PlayerUnit->Counter(this);
 			}
 		}
 	}
 	AllPlayerIdle();
-
 }
-
 
 void AUBBaseMonster::StartRotateMeshToOrigin()
 {
 	if (bIsDeath == true) return;
-	currentState = EActionState::idle;
+	currentState = EActionState::Idle;
 	OnActionFinishedDelegate.Broadcast();
 	OnActionFinishedDelegate.Clear();
-	GetWorld()->GetTimerManager().ClearTimer(RotatoeToOrginTimerHandle);
+	GetWorld()->GetTimerManager().ClearTimer(RotateToOriginTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(
-		RotatoeToOrginTimerHandle,
+		RotateToOriginTimerHandle,
 		this,
 		&AUBBaseMonster::RotateTickToOrigin,
 		0.016f,
 		true
 	);
-
 }
 
 void AUBBaseMonster::HandleShieldBroken()
 {
-	bIsPlay = true;
+	bIsPlaying = true;
 }
 
 void AUBBaseMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
+
 void AUBBaseMonster::ResolveTargetsFromSkill()
 {
 	ResolvedTargets.Empty();
@@ -360,62 +343,56 @@ void AUBBaseMonster::ResolveTargetsFromSkill()
 	}
 	else if (CurrentSkillData->target_scope == 3)
 	{
-
 		ResolvedTargets = bm->GetAllPlayer();
 	}
 }
 
-FCharacterSkill* AUBBaseMonster::ResolveSkillDataFromActionTag(
-	const FGameplayTag& ActionTag)
+FCharacterSkill* AUBBaseMonster::ResolveSkillDataFromActionTag(const FGameplayTag& InActionTag)
 {
-	if (ActionTag == UBGameplayTags::Action_Monster_AttackA)
+	if (InActionTag == UBGameplayTags::Action_Monster_AttackA)
 		return FindSkillKey(TEXT("SKILL_ACTIVE1"));
 
-	if (ActionTag == UBGameplayTags::Action_Monster_AttackB)
+	if (InActionTag == UBGameplayTags::Action_Monster_AttackB)
 		return FindSkillKey(TEXT("SKILL_ACTIVE2"));
 
-	if (ActionTag == UBGameplayTags::Action_Monster_AttackC)
+	if (InActionTag == UBGameplayTags::Action_Monster_AttackC)
 		return FindSkillKey(TEXT("SKILL_ACTIVE3"));
 
-	if (ActionTag == UBGameplayTags::Action_Monster_AttackD)
+	if (InActionTag == UBGameplayTags::Action_Monster_AttackD)
 		return FindSkillKey(TEXT("SKILL_ACTIVE4"));
 
 	return nullptr;
 }
 
-void AUBBaseMonster::InterpRotateTo(
-const FRotator& TargetRot,
-float Speed,
-FTimerHandle& TimerHandle
-)
+void AUBBaseMonster::InterpRotateTo(const FRotator& InTargetRot, float InSpeed, FTimerHandle& InTimerHandle)
 {
 	float DeltaTime = GetWorld()->GetDeltaSeconds();
 
 	FRotator Curr = GetMesh()->GetRelativeRotation();
-	FRotator Next = FMath::RInterpConstantTo(Curr, TargetRot, DeltaTime, Speed);
+	FRotator Next = FMath::RInterpConstantTo(Curr, InTargetRot, DeltaTime, InSpeed);
 
 	GetMesh()->SetRelativeRotation(Next);
 
-	if (Next.Equals(TargetRot, 0.5f))
+	if (Next.Equals(InTargetRot, 0.5f))
 	{
-		GetMesh()->SetRelativeRotation(TargetRot);
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		GetMesh()->SetRelativeRotation(InTargetRot);
+		GetWorld()->GetTimerManager().ClearTimer(InTimerHandle);
 	}
 }
-void AUBBaseMonster::SheildRefill()
-{
-	if (bisRefill == true) return;
 
-	if (characterType == ECharacterType::CT_Boss)
+void AUBBaseMonster::ShieldRefill()
+{
+	if (bIsRefill == true) return;
+
+	if (characterType == ECharacterType::Boss)
 	{
-		AUBAIController* AI = Cast<AUBAIController>(GetController());
+		AUBAIController* AIController = Cast<AUBAIController>(GetController());
 		statsComp->currentStats.shield = (statsComp->stats.shield * 0.3f);
 
 		statsComp->currentStats.Mp += 20;
-		bisRefill = true;
+		bIsRefill = true;
 	}
 }
-
 
 void AUBBaseMonster::DeathCharacter()
 {
@@ -423,5 +400,5 @@ void AUBBaseMonster::DeathCharacter()
 	currentState = EActionState::Die;
 	asComp->OnActionSelected(UBGameplayTags::Action_Death);
 	bm->DeathCharacterReMove(this);
-
 }
+

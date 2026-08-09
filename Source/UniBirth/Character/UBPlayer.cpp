@@ -1,8 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "UBPlayer.h"
 #include "Component/ActionSystemComponent.h"
 #include "Battle/System/UBPlayerController.h"
-#include  <Camera/CameraComponent.h>
+#include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Component/UBPlayerWidgetComponent.h"
 #include "Component/UBCharacterUI.h"
@@ -10,24 +9,25 @@
 #include "Component/UBComboBuffComponent.h"
 #include "Component/UBBuffComponent.h"
 #include "Common/SubSystem/UBInventorySubsystem.h"
+
 AUBPlayer::AUBPlayer()
 {
-	teamType = ETeamType::Ally_Team;
+	teamType = ETeamType::Ally;
 
 	PrimaryActorTick.bCanEverTick = true;
-	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SprinArmComp"));
-	springArmComp->SetupAttachment(RootComponent);
-	springArmComp->SetRelativeLocation(FVector(0.0f, 10.f, 70.f));
-	springArmComp->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
+	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->SetRelativeLocation(FVector(0.0f, 10.f, 70.f));
+	SpringArmComponent->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 
-	springArmComp->TargetArmLength = 150.f;
-	springArmComp->bUsePawnControlRotation = false;
-	springArmComp->bDoCollisionTest = false;
+	SpringArmComponent->TargetArmLength = 150.f;
+	SpringArmComponent->bUsePawnControlRotation = false;
+	SpringArmComponent->bDoCollisionTest = false;
 
-	camComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CamComp"));
-	camComp->SetRelativeLocation(FVector(-265.0f, 191.0f, 18.0f));
-	camComp->SetRelativeRotation(FQuat(FRotator(-0.3f, -2.0f, -4.f)));
-	camComp->SetupAttachment(springArmComp);
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CamComp"));
+	CameraComponent->SetRelativeLocation(FVector(-265.0f, 191.0f, 18.0f));
+	CameraComponent->SetRelativeRotation(FQuat(FRotator(-0.3f, -2.0f, -4.f)));
+	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	UIPosition = CreateDefaultSubobject<USceneComponent>(TEXT("UIPosition"));
 	UIPosition->SetRelativeLocation(FVector(-140.0f, 14.0f, 19.0f));
@@ -35,7 +35,7 @@ AUBPlayer::AUBPlayer()
 	UIPosition->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f));
 	UIPosition->SetupAttachment(RootComponent);
 
-	comboBuffComp = CreateDefaultSubobject<UUBComboBuffComponent>(TEXT("ComboBuffComp"));
+	ComboBuffComponent = CreateDefaultSubobject<UUBComboBuffComponent>(TEXT("ComboBuffComp"));
 
 	GunMesh_R = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh_R"));
 	GunMesh_R->SetupAttachment(GetMesh(), TEXT("Hand_Gun_R"));
@@ -43,24 +43,24 @@ AUBPlayer::AUBPlayer()
 	GunMesh_L = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh_L"));
 	GunMesh_L->SetupAttachment(GetMesh(), TEXT("Hand_Gun_L"));
 
-
-
 	DroneMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DroneMesh"));
 	DroneMesh->SetupAttachment(RootComponent);
 	DroneMesh->SetRelativeLocation(FVector(70.0f, 10.0f, 120.0f));
 	DroneMesh->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
 }
 
-bool AUBPlayer::operator<(const AUBPlayer& other) const
+bool AUBPlayer::operator<(const AUBPlayer& Other) const
 {
-	return (statsComp->currentStats.AttackSpeed > other.statsComp->currentStats.Attack);
+	return (statsComp->currentStats.AttackSpeed > Other.statsComp->currentStats.Attack);
 }
-
 
 void AUBPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	OriginalCamLocation = camComp->GetRelativeLocation();
+	if (CameraComponent)
+	{
+		OriginalCamLocation = CameraComponent->GetRelativeLocation();
+	}
 	if (GunMesh_R && GunAsset_R)
 	{
 		GunMesh_R->SetSkeletalMesh(GunAsset_R);
@@ -79,25 +79,23 @@ void AUBPlayer::BeginPlay()
 			{
 				switch (characterType)
 				{
-				case ECharacterType::CT_Uni:
+				case ECharacterType::Uni:
 					if (InventorySubsystem->uniEquipment.Drone == nullptr) {
 						DroneMesh->SetVisibility(false);
 					}
 					break;
-				case ECharacterType::CT_Tau:
+				case ECharacterType::Tau:
 					if (InventorySubsystem->tauEquipment.Drone == nullptr) {
 						DroneMesh->SetVisibility(false);
 					}
 					break;
-				case ECharacterType::CT_Elvasia:
+				case ECharacterType::Elvasia:
 					if (InventorySubsystem->elvasiaEquipment.Drone == nullptr) {
 						DroneMesh->SetVisibility(false);
 					}
 					break;
 				}
-
 			}
-
 		}
 	}
 }
@@ -105,26 +103,23 @@ void AUBPlayer::BeginPlay()
 void AUBPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AUBPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void AUBPlayer::AttackHit()
 {
-
 }
 
-void AUBPlayer::TOggleWeaponRotator()
+void AUBPlayer::ToggleWeaponRotator()
 {
 	if (GunMesh_R)
 	{
-		bWeaponRotated = !bWeaponRotated;
-		if (bWeaponRotated)
+		bIsWeaponRotated = !bIsWeaponRotated;
+		if (bIsWeaponRotated)
 		{
 			GunMesh_R->SetRelativeRotation(
 				FRotator(
@@ -138,42 +133,50 @@ void AUBPlayer::TOggleWeaponRotator()
 			GunMesh_R->SetRelativeRotation(FRotator::ZeroRotator);
 		}
 	}
-
 }
 
 void AUBPlayer::DeathCharacter()
 {
 	Super::DeathCharacter();
 
-	comboBuffComp->ResetBuffs(EComboType::GUARD, EDelCase::Death);
-	comboBuffComp->ResetBuffs(EComboType::PARRY, EDelCase::Death);
-	comboBuffComp->ResetBuffs(EComboType::DODGE, EDelCase::Death);
-	BuffComp->DeleteBuffByReason(EDelCase::Death);
-}
-
-
-void AUBPlayer::SetStealthOpacity(float Alpha)
-{
-	if (USkeletalMeshComponent* getMesh = GetMesh())
+	if (ComboBuffComponent)
 	{
-		getMesh->SetScalarParameterValueOnMaterials(TEXT("StealthAlpha"), Alpha);
-		GunMesh_R->SetScalarParameterValueOnMaterials(TEXT("StealthAlpha"), Alpha);
+		ComboBuffComponent->ResetBuffs(EComboType::Guard, EDelCase::Death);
+		ComboBuffComponent->ResetBuffs(EComboType::Parry, EDelCase::Death);
+		ComboBuffComponent->ResetBuffs(EComboType::Dodge, EDelCase::Death);
+	}
+	if (BuffComp)
+	{
+		BuffComp->DeleteBuffByReason(EDelCase::Death);
 	}
 }
 
+void AUBPlayer::SetStealthOpacity(float InAlpha)
+{
+	if (USkeletalMeshComponent* CharacterMesh = GetMesh())
+	{
+		CharacterMesh->SetScalarParameterValueOnMaterials(TEXT("StealthAlpha"), InAlpha);
+		if (GunMesh_R)
+		{
+			GunMesh_R->SetScalarParameterValueOnMaterials(TEXT("StealthAlpha"), InAlpha);
+		}
+	}
+}
 
 void AUBPlayer::EndStealth()
 {
 	statsComp->currentStats.CurrState.Remove(EUnitState::Stealth);
 	statsComp->currentStats.critRate = 0.2f;
+	bIsStealth = false;
 	SetStealthOpacity(1.0f);
 }
 
 void AUBPlayer::StartStealth()
 {
-
 	statsComp->currentStats.CurrState.Add(EUnitState::Stealth);
 	statsComp->currentStats.critRate = 1.0f;
+	bIsStealth = true;
 	SetStealthOpacity(0.35f);
 }
+
 

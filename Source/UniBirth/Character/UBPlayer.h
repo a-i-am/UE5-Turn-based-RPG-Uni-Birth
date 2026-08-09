@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,24 +11,27 @@
 #include "Common/System/UBGameInstance.h"
 #include "UBPlayer.generated.h"
 
-
 USTRUCT(Atomic, BlueprintType)
 struct FCharacterEquipmentStruct
 {
 	GENERATED_USTRUCT_BODY()
-public:
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	UUBWeapon* Weapon;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UUBArmor* Head;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UUBArmor* Chest;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UUBArmor* Hand;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UUBArmor* Drone;
-};
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TObjectPtr<UUBWeapon> Weapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TObjectPtr<UUBArmor> Head;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TObjectPtr<UUBArmor> Chest;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TObjectPtr<UUBArmor> Hand;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	TObjectPtr<UUBArmor> Drone;
+};
 
 UCLASS()
 class UNIBIRTH_API AUBPlayer : public AUBCombatUnit
@@ -38,75 +39,71 @@ class UNIBIRTH_API AUBPlayer : public AUBCombatUnit
 	GENERATED_BODY()
 
 public:
-
 	AUBPlayer();
-	bool operator<(const AUBPlayer& other) const;
+	bool operator<(const AUBPlayer& Other) const;
 
 protected:
-
 	virtual void BeginPlay() override;
 
 public:
-
 	virtual void Tick(float DeltaTime) override;
-
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
-	TObjectPtr<class USpringArmComponent> springArmComp;
+	TObjectPtr<class USpringArmComponent> SpringArmComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category  = "Camera")
-	TObjectPtr<class UCameraComponent> camComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	TObjectPtr<class UCameraComponent> CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USceneComponent* UIPosition;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	TObjectPtr<USSceneComponent> UIPosition;
 
 	virtual void AttackHit() override;
-	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
-	TObjectPtr<class UUBComboBuffComponent> comboBuffComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Buff")
+	TObjectPtr<class UUBComboBuffComponent> ComboBuffComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	USkeletalMesh* GunAsset_R;
+	TObjectPtr<USkeletalMesh> GunAsset_R;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	USkeletalMesh* GunAsset_L;
+	TObjectPtr<USkeletalMesh> GunAsset_L;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
-	USkeletalMeshComponent* GunMesh_R;
+	TObjectPtr<USkeletalMeshComponent> GunMesh_R;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
-	USkeletalMeshComponent* GunMesh_L;
+	TObjectPtr<USkeletalMeshComponent> GunMesh_L;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Drone")
-	USkeletalMeshComponent* DroneMesh;
-
+	TObjectPtr<USkeletalMeshComponent> DroneMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-	EWeaponHandType currentWeaponType;
+	EWeaponHandType CurrentWeaponType;
 
-	void TOggleWeaponRotator();
-	bool bWeaponRotated = false;
+	void ToggleWeaponRotator();
 
-	float AuccTime = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	bool bIsWeaponRotated = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	float AccTime = 0.f;
+
 	FVector BaseOffset;
-
-
-
-
-
 	FVector OriginalCamLocation;
+
 	virtual void DeathCharacter() override;
 
-	void SetStealthOpacity(float Alpha);
+	void SetStealthOpacity(float InAlpha);
 	void EndStealth();
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "State")
 	void StartStealth();
 
-	bool isStealth = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	bool bIsStealth = false;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void ZoomInOut(bool isZoomin);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Camera")
+	void ZoomInOut(bool bInZoomIn);
 };
+

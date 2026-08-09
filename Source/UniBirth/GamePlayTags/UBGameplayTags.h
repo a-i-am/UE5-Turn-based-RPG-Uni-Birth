@@ -1,4 +1,5 @@
 #pragma once
+
 #include "NativeGameplayTags.h"
 
 namespace UBGameplayTags
@@ -14,8 +15,7 @@ namespace UBGameplayTags
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Down);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Death);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_StandUp);
-    UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Defence);
-
+    UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Defense);
 
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackA);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackB);
@@ -23,5 +23,5 @@ namespace UBGameplayTags
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_AttackD);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_Hit);
     UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Monster_Down);
-
 }
+

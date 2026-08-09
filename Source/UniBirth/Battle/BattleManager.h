@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,127 +12,126 @@ enum class EBattleState : uint8
 	None,
 	Wait,
 	Turn,
-	Die,
+	Die
 };
+
 class AUBCombatUnit;
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnMonsterAttackStarted,
-	AUBCombatUnit*  , FCharacterSkill* skill );
-DECLARE_MULTICAST_DELEGATE_ThreeParams(
-	FOnMonsterAttackResult,
-	AUBCombatUnit* ,
-	AUBCombatUnit* ,
-	EResultType
-);
-DECLARE_MULTICAST_DELEGATE(FOnUIHide);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHitAction, AUBCombatUnit* , EResultType);
-DECLARE_MULTICAST_DELEGATE(FOnTimeDelayEnded);
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnMonsterAttackStartedSignature, AUBCombatUnit*, FCharacterSkill*);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnMonsterAttackResultSignature, AUBCombatUnit*, AUBCombatUnit*, EResultType);
+DECLARE_MULTICAST_DELEGATE(FOnUIHideSignature);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHitActionSignature, AUBCombatUnit*, EResultType);
+DECLARE_MULTICAST_DELEGATE(FOnTimeDelayEndedSignature);
+
 UCLASS()
 class UNIBIRTH_API ABattleManager : public AActor
 {
 	GENERATED_BODY()
 
 public:
-
 	ABattleManager();
 
 protected:
-
 	virtual void BeginPlay() override;
 
 public:
-
 	void InitBattle();
 	void StartBattle();
 	void NextTurn();
 	void ResetCharacters();
 	bool CheckGameEnd();
 
-public:
-
 	virtual void Tick(float DeltaTime) override;
 
 	void BuildTurnOrder();
-
 	void BuildOrderList();
-
 	void StartNewRound();
 
-	UPROPERTY(EditAnywhere)
-	TArray<class AUBCombatUnit*> characters;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Turn")
+	TArray<TObjectPtr<AUBCombatUnit>> Characters;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Turn")
 	TArray<TObjectPtr<AUBCombatUnit>> TurnOrder;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Turn")
 	TArray<TObjectPtr<AUBCombatUnit>> CurrentTurnOrder;
 
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Turn")
 	TArray<TObjectPtr<AUBCombatUnit>> TotalTurnOrder;
 
-	AUBCombatUnit* currentCharacter = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turn")
+	TObjectPtr<AUBCombatUnit> CurrentCharacter;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UUBCharacterPortraitList> turnOrderListWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TObjectPtr<class UUBCharacterPortraitList> TurnOrderListWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 currentTurn = 0;
-	UPROPERTY(EditAnywhere)
-	int32 currentTurnIndex = 0;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<TObjectPtr<AUBCombatUnit>> targetList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn")
+	int32 CurrentTurn = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn")
+	int32 CurrentTurnIndex = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target")
+	TArray<TObjectPtr<AUBCombatUnit>> TargetList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target")
 	TArray<TObjectPtr<AUBCombatUnit>> PlayerList;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Target")
+	int32 CurrentTargetIndex = 0;
 
-	UPROPERTY(EditAnywhere)
-	int32 currentTargetIndex = 0;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Target")
 	TArray<AUBCombatUnit*> GetTargetList();
+
 	TArray<AUBCombatUnit*> GetSingleTargetPlayerList();
-	UFUNCTION(BlueprintCallable)
-	AUBCombatUnit* GetCurrentCharacter() { return currentCharacter; }
+
+	UFUNCTION(BlueprintCallable, Category = "Turn")
+	AUBCombatUnit* GetCurrentCharacter() { return CurrentCharacter; }
 
 	AUBCombatUnit* GetRandomPlayer();
 	const TArray<AUBCombatUnit*>& GetAllPlayer();
-	FOnMonsterAttackStarted OnMonsterAttackStarted;
-	FOnMonsterAttackResult OnMonsterAttackResult;
-	FOnHitAction OnHitAciton;
-	FOnTimeDelayEnded OnTimeDelayEnded;
+
+	FOnMonsterAttackStartedSignature OnMonsterAttackStarted;
+	FOnMonsterAttackResultSignature OnMonsterAttackResult;
+	FOnHitActionSignature OnHitAction;
+	FOnTimeDelayEndedSignature OnTimeDelayEnded;
+
 	EResultType CurrentResult = EResultType::Success;
 	EResultType GetReactionResult() const { return CurrentResult; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Turn")
 	bool bIsProcessingTurn = false;
 
 	UFUNCTION()
-	void HandleMonsterAttackResult(class AUBBaseMonster* Monster, AUBCombatUnit* Target,EResultType Result);
-	void BrodacastAttackResult(EResultType Result);
-	void BroadcastAttackResultToSingle(AUBCombatUnit* Target, EResultType Result);
+	void HandleMonsterAttackResult(class AUBBaseMonster* InMonster, AUBCombatUnit* InTarget, EResultType InResult);
+	void BroadcastAttackResult(EResultType InResult);
+	void BroadcastAttackResultToSingle(AUBCombatUnit* InTarget, EResultType InResult);
 
 	void SetReactionResult(EResultType InResult);
+	void ForceSetActionState(EActionState InState);
+	void DeathCharacterRemove(AUBCombatUnit* InDeathUnit);
 
-	void ForceSetActionState(EActionState State);
-
-	void DeathCharacterReMove(AUBCombatUnit* deathUnit);
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Time")
 	void GlobalTimeStop();
 
-	UFUNCTION(BlueprintCallable)
-	void UIHideAllWiget();
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void UIHideAllWidget();
 
-	FOnUIHide OnUIHide;
+	FOnUIHideSignature OnUIHide;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Time")
 	bool bIsTimeDelay = true;
-	UFUNCTION(BlueprintCallable)
-	void SetGlobalTimeReset();
-	bool bIsStun(AUBCombatUnit* unit);
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, Category = "Time")
+	void SetGlobalTimeReset();
+
+	bool IsStun(AUBCombatUnit* InUnit);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Game")
 	void GameOver();
 	virtual void GameOver_Implementation();
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category = "Game")
 	void GameClear();
 	virtual void GameClear_Implementation();
 
@@ -143,9 +140,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	TObjectPtr<class UCameraComponent> TargetCamera;
 
-	void TargetAttack(AUBCombatUnit* target);
+	void TargetAttack(AUBCombatUnit* InTarget);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sequence")
-	TObjectPtr<class ULevelSequence> sequenceCut;
-
+	TObjectPtr<class ULevelSequence> SequenceCut;
 };
+

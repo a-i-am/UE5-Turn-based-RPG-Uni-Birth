@@ -1,9 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Battle/BattleManager.h"
 #include "Battle/SampleCharacter.h"
-#include "kismet/GameplayStatics.h"
+#include "Kismet/GameplayStatics.h"
 #include "Battle/System/UBPlayerController.h"
 #include "Component/UBCharacterUI.h"
 #include "Character/Enemy/UBBaseMonster.h"
@@ -21,113 +18,92 @@
 #include "Component/UBBuffComponent.h"
 #include "UI/Combat/UBBattleSelectBase.h"
 #include "Battle/System/UBGameStateBase.h"
-#include "Battle/System/UBGameStateBase.h"
-
 
 ABattleManager::ABattleManager()
 {
-
 	PrimaryActorTick.bCanEverTick = false;
-	RootComponent =
-		CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
 	TargetCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TargetCamera"));
 	TargetCamera->SetupAttachment(RootComponent);
 }
 
-
 void ABattleManager::BeginPlay()
 {
 	Super::BeginPlay();
-	currentTurn = 0;
-	currentTurnIndex = 0;
-
+	CurrentTurn = 0;
+	CurrentTurnIndex = 0;
 }
 
 void ABattleManager::InitBattle()
 {
-	TArray<AActor*> acters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUBCombatUnit::StaticClass(), acters);
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUBCombatUnit::StaticClass(), Actors);
 
-	characters.Empty();
+	Characters.Empty();
 
-	for (AActor* Actor : acters)
+	for (AActor* Actor : Actors)
 	{
 		if (AUBCombatUnit* Unit = Cast<AUBCombatUnit>(Actor))
 		{
-			characters.Add(Unit);
+			Characters.Add(Unit);
 
-
-			if (Unit->teamType == ETeamType::Enemy_Team)
+			if (Unit->teamType == ETeamType::Enemy)
 			{
-				targetList.Add(Unit);
+				TargetList.Add(Unit);
 			}
-
-			else if (Unit->teamType == ETeamType::Ally_Team)
+			else if (Unit->teamType == ETeamType::Ally)
 			{
 				PlayerList.Add(Unit);
 			}
 		}
-
 	}
 
-	currentTurn = 1;
-	currentTurnIndex = 0;
-	TArray<UUserWidget*> widgets;
-	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), widgets, UUBCharacterPortraitList::StaticClass(),false);
+	CurrentTurn = 1;
+	CurrentTurnIndex = 0;
+	TArray<UUserWidget*> Widgets;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), Widgets, UUBCharacterPortraitList::StaticClass(), false);
 	BuildTurnOrder();
 	StartNewRound();
-
-
-
 }
-
 
 void ABattleManager::StartBattle()
 {
 	if (CurrentTurnOrder.Num() <= 0)
 		return;
 
-	AUBCombatUnit* Base = CurrentTurnOrder[currentTurnIndex];
+	AUBCombatUnit* Base = CurrentTurnOrder[CurrentTurnIndex];
 	if (!Base)
 		return;
 
-	if (ASampleCharacter* player = Cast<ASampleCharacter>(Base))
+	if (ASampleCharacter* PlayerUnit = Cast<ASampleCharacter>(Base))
 	{
-		currentCharacter = player;
-		player->SetTurn(true);
+		CurrentCharacter = PlayerUnit;
+		PlayerUnit->SetTurn(true);
 		if (AUBGameStateBase* GS = GetWorld()->GetGameState<AUBGameStateBase>())
 		{
 			GS->bAllowPlayerUI = true;
 		}
-
-		if(AUBPlayerController* PC = Cast<AUBPlayerController>(GetWorld()->GetFirstPlayerController()))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, TEXT("PC->onPlayerTurnStart"));
-
-		}
 	}
-	else if (AUBBaseMonster* monster = Cast<AUBBaseMonster>(Base))
+	else if (AUBBaseMonster* MonsterUnit = Cast<AUBBaseMonster>(Base))
 	{
-		currentCharacter = monster;
-		monster->SetTurn(true);
+		CurrentCharacter = MonsterUnit;
+		MonsterUnit->SetTurn(true);
 		if (AUBGameStateBase* GS = GetWorld()->GetGameState<AUBGameStateBase>())
 		{
 			GS->bAllowPlayerUI = false;
 		}
 
-		if (AUBAIController* AI = Cast<AUBAIController>(monster->GetController()))
+		if (AUBAIController* AI = Cast<AUBAIController>(MonsterUnit->GetController()))
 		{
 			AI->GetBlackboardComponent()->SetValueAsBool("bIsMyTurn", true);
 			AI->UpdateToTarget();
-
 		}
 	}
 	BuildOrderList();
 	if (AUBPlayerController* PC = Cast<AUBPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
-		PC->OnPlayerTurnStarted(currentCharacter);
+		PC->OnPlayerTurnStarted(CurrentCharacter);
 	}
 }
 
@@ -136,34 +112,30 @@ void ABattleManager::NextTurn()
 	if (bIsProcessingTurn)
 		return;
 
-
 	bIsProcessingTurn = true;
 	HandleGameEnd();
 
-
-	if (currentCharacter)
+	if (CurrentCharacter)
 	{
-		currentCharacter->BuffComp->AdvanceBuffTurns();
-
-		currentCharacter->SetTurn(false);
+		CurrentCharacter->BuffComp->AdvanceBuffTurns();
+		CurrentCharacter->SetTurn(false);
 	}
 
-	currentTurnIndex++;
+	CurrentTurnIndex++;
 	BuildTurnOrder();
 
-	if (currentTurnIndex >= CurrentTurnOrder.Num())
+	if (CurrentTurnIndex >= CurrentTurnOrder.Num())
 	{
-		currentTurn++;
+		CurrentTurn++;
 		StartNewRound();
 	}
 
 	if (CurrentTurnOrder.Num() <= 0)
 		return;
 
-	AUBCombatUnit* NextUnit = CurrentTurnOrder[currentTurnIndex];
-	if (bIsStun(NextUnit))
+	AUBCombatUnit* NextUnit = CurrentTurnOrder[CurrentTurnIndex];
+	if (IsStun(NextUnit))
 	{
-		AUBPlayerController* PC = Cast<AUBPlayerController>(GetWorld()->GetFirstPlayerController());
 		bIsProcessingTurn = false;
 		FTimerHandle DelayHandle;
 		GetWorld()->GetTimerManager().SetTimer(
@@ -173,9 +145,7 @@ void ABattleManager::NextTurn()
 			1.0f,
 			false
 		);
-
 		return;
-
 	}
 	UUBGameInstance* GI = GetGameInstance<UUBGameInstance>();
 	if (GI == nullptr)
@@ -191,8 +161,7 @@ void ABattleManager::NextTurn()
 		return;
 	}
 
-	float HpValue = 0.0f;
-	HpValue = NextUnit->statsComp->currentStats.Hp;
+	float HpValue = NextUnit->statsComp->currentStats.Hp;
 
 	if (HpValue <= 0.0f)
 	{
@@ -204,17 +173,17 @@ void ABattleManager::NextTurn()
 	}
 	GetWorld()->GetTimerManager().SetTimerForNextTick([this, NextUnit]()
 		{
-			currentCharacter = NextUnit;
-			if (ASampleCharacter* player = Cast<ASampleCharacter>(NextUnit))
+			CurrentCharacter = NextUnit;
+			if (ASampleCharacter* PlayerUnit = Cast<ASampleCharacter>(NextUnit))
 			{
-				currentCharacter = player;
-				player->SetTurn(true);
+				CurrentCharacter = PlayerUnit;
+				PlayerUnit->SetTurn(true);
 
 				if (AUBPlayerController* PC = Cast<AUBPlayerController>(GetWorld()->GetFirstPlayerController()))
 				{
 					if (AUBBattleHUD* PCHUD = Cast<AUBBattleHUD>(PC->GetHUD()))
 					{
-						PCHUD->CharacterUI->ChangeOwner(player);
+						PCHUD->CharacterUI->ChangeOwner(PlayerUnit);
 						PCHUD->CharacterUI->ShowWidgetComp(PCHUD->CharacterUI->AttackWidget);
 						if (PCHUD->CurrentWidget != nullptr) {
 							PCHUD->CurrentWidget->PlayAnim();
@@ -223,75 +192,58 @@ void ABattleManager::NextTurn()
 				}
 				return;
 			}
-			else if (AUBBaseMonster* monster = Cast<AUBBaseMonster>(NextUnit))
+			else if (AUBBaseMonster* MonsterUnit = Cast<AUBBaseMonster>(NextUnit))
 			{
-				currentCharacter = monster;
-				monster->SetTurn(true);
+				CurrentCharacter = MonsterUnit;
+				MonsterUnit->SetTurn(true);
 
-				if (AUBAIController* AI = Cast<AUBAIController>(monster->GetController()))
+				if (AUBAIController* AI = Cast<AUBAIController>(MonsterUnit->GetController()))
 				{
 					AI->GetBlackboardComponent()->SetValueAsBool("bIsMyTurn", true);
 					OnUIHide.Broadcast();
 					AI->UpdateToTarget();
-
 				}
 				return;
 			}
 		});
 	bIsProcessingTurn = false;
-
 }
-
 
 void ABattleManager::ResetCharacters()
 {
-
-
-
-
-
-	characters.Sort();
+	Characters.Sort();
 }
-
 
 bool ABattleManager::CheckGameEnd()
 {
-	if (PlayerList.IsEmpty()|| targetList.IsEmpty())
+	if (PlayerList.IsEmpty() || TargetList.IsEmpty())
 	{
 		return false;
 	}
-	else {
-		return true;
-	}
+	return true;
 }
-
-
 
 void ABattleManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ABattleManager::BuildTurnOrder()
 {
 	TurnOrder.Empty();
 
-
-	for (AUBCombatUnit* Unit : characters)
+	for (AUBCombatUnit* Unit : Characters)
 	{
 		if (!Unit)
 			continue;
 
-		float HpValue = 0.0f;
-		HpValue = Unit->statsComp->currentStats.Hp;
+		float HpValue = Unit->statsComp->currentStats.Hp;
 
 		if (HpValue > 0.0f)
 		{
 			TurnOrder.Add(Unit);
 		}
 	}
-
 
 	TurnOrder.Sort([this](const AUBCombatUnit& A, const AUBCombatUnit& B)
 		{
@@ -312,7 +264,7 @@ void ABattleManager::BuildOrderList()
 
 	const int32 MaxCount = 8;
 
-	for (int32 i = currentTurnIndex; i < CurrentTurnOrder.Num(); ++i)
+	for (int32 i = CurrentTurnIndex; i < CurrentTurnOrder.Num(); ++i)
 	{
 		if (AUBCombatUnit* Unit = CurrentTurnOrder[i])
 			TotalTurnOrder.Add(Unit);
@@ -329,40 +281,35 @@ void ABattleManager::BuildOrderList()
 			TotalTurnOrder.Add(Unit);
 	}
 
-	if (turnOrderListWidget == nullptr)
+	if (TurnOrderListWidget == nullptr)
 		return;
-	for (int32 i =0; i<8; ++i)
+	for (int32 i = 0; i < 8; ++i)
 	{
-		turnOrderListWidget->SetPortraitType(i, TotalTurnOrder[i]->characterType);
+		TurnOrderListWidget->SetPortraitType(i, TotalTurnOrder[i]->characterType);
 	}
-	turnOrderListWidget->ReApplyAll();
+	TurnOrderListWidget->ReApplyAll();
 }
 
 void ABattleManager::StartNewRound()
 {
-
-
 	CurrentTurnOrder = TurnOrder;
-	currentTurnIndex = 0;
+	CurrentTurnIndex = 0;
 }
 
 TArray<AUBCombatUnit*> ABattleManager::GetTargetList()
 {
-	TArray<AUBCombatUnit*> templist;
+	TArray<AUBCombatUnit*> TempList;
 
-	for (AUBCombatUnit* target : targetList)
+	for (AUBCombatUnit* TargetUnit : TargetList)
 	{
-		if (target->statsComp->currentStats.Hp > 0)
+		if (TargetUnit->statsComp->currentStats.Hp > 0)
 		{
-			templist.Add(target);
+			TempList.Add(TargetUnit);
 		}
 	}
 
-	templist.Sort([this](const AUBCombatUnit& A, const AUBCombatUnit& B)
+	TempList.Sort([this](const AUBCombatUnit& A, const AUBCombatUnit& B)
 		{
-
-
-
 			ECharacterType TypeA = A.characterType;
 			ECharacterType TypeB = B.characterType;
 
@@ -371,30 +318,21 @@ TArray<AUBCombatUnit*> ABattleManager::GetTargetList()
 				return static_cast<uint8>(TypeA) > static_cast<uint8>(TypeB);
 			}
 
-
-
-
-			int HpA = A.statsComp->currentStats.Hp;
-			int HpB = B.statsComp->currentStats.Hp;
+			int32 HpA = A.statsComp->currentStats.Hp;
+			int32 HpB = B.statsComp->currentStats.Hp;
 
 			if (HpA != HpB)
 			{
 				return HpA < HpB;
 			}
 
-
-
-
-			int AtkA = A.statsComp->currentStats.Attack;
-			int AtkB = B.statsComp->currentStats.Attack;
+			int32 AtkA = A.statsComp->currentStats.Attack;
+			int32 AtkB = B.statsComp->currentStats.Attack;
 
 			if (AtkA != AtkB)
 			{
 				return AtkA > AtkB;
 			}
-
-
-
 
 			float X_A = A.GetActorLocation().X;
 			float X_B = B.GetActorLocation().X;
@@ -402,9 +340,8 @@ TArray<AUBCombatUnit*> ABattleManager::GetTargetList()
 			return X_A < X_B;
 		});
 
-	targetList = templist;
-
-	return targetList;
+	TargetList = TempList;
+	return TargetList;
 }
 
 TArray<AUBCombatUnit*> ABattleManager::GetSingleTargetPlayerList()
@@ -420,7 +357,6 @@ TArray<AUBCombatUnit*> ABattleManager::GetSingleTargetPlayerList()
 	return VisiblePlayers;
 }
 
-
 AUBCombatUnit* ABattleManager::GetRandomPlayer()
 {
 	TArray<AUBCombatUnit*> Candidates = GetSingleTargetPlayerList();
@@ -434,16 +370,15 @@ AUBCombatUnit* ABattleManager::GetRandomPlayer()
 	{
 		TotalAggroPoint += Unit->statsComp->currentStats.aggroPoint;
 	}
-	int32 randomValue = FMath::RandRange(1, TotalAggroPoint);
+	int32 RandomValue = FMath::RandRange(1, TotalAggroPoint);
 
 	int32 AccAggro = 0;
 	for (AUBCombatUnit* Unit : Candidates)
 	{
 		AccAggro += Unit->statsComp->currentStats.aggroPoint;
 
-		if (randomValue <= AccAggro)
+		if (RandomValue <= AccAggro)
 		{
-
 			return Unit;
 		}
 	}
@@ -451,43 +386,41 @@ AUBCombatUnit* ABattleManager::GetRandomPlayer()
 	return nullptr;
 }
 
-
 const TArray<AUBCombatUnit*>& ABattleManager::GetAllPlayer()
 {
 	return PlayerList;
 }
 
-void ABattleManager::HandleMonsterAttackResult(AUBBaseMonster* Monster, AUBCombatUnit* Target, EResultType Result)
+void ABattleManager::HandleMonsterAttackResult(AUBBaseMonster* InMonster, AUBCombatUnit* InTarget, EResultType InResult)
 {
-	if (!Monster) return;
-	if (Monster->CurrentSkillData->target_scope == 3)
+	if (!InMonster) return;
+	if (InMonster->CurrentSkillData->target_scope == 3)
 	{
-		BrodacastAttackResult(Result);
+		BroadcastAttackResult(InResult);
 	}
-	else if (Monster->CurrentSkillData->target_scope == 1)
+	else if (InMonster->CurrentSkillData->target_scope == 1)
 	{
-		BroadcastAttackResultToSingle(Target, Result);
-	}
-}
-
-void ABattleManager::BrodacastAttackResult(EResultType Result)
-{
-
-	for (AUBCombatUnit* ps : PlayerList)
-	{
-		ASampleCharacter* character = Cast<ASampleCharacter>(ps);
-		if (!character) continue;
-		character->HandleMonsterAttackResolved(nullptr, ps, Result);
+		BroadcastAttackResultToSingle(InTarget, InResult);
 	}
 }
 
-void ABattleManager::BroadcastAttackResultToSingle(AUBCombatUnit* Target, EResultType Result)
+void ABattleManager::BroadcastAttackResult(EResultType InResult)
 {
-	if (!Target) return;
+	for (AUBCombatUnit* PlayerUnit : PlayerList)
+	{
+		ASampleCharacter* CharacterUnit = Cast<ASampleCharacter>(PlayerUnit);
+		if (!CharacterUnit) continue;
+		CharacterUnit->HandleMonsterAttackResolved(nullptr, PlayerUnit, InResult);
+	}
+}
 
-	ASampleCharacter* character = Cast<ASampleCharacter>(Target);
-	if (!character) return;
-	character->HandleMonsterAttackResolved(nullptr, character, Result);
+void ABattleManager::BroadcastAttackResultToSingle(AUBCombatUnit* InTarget, EResultType InResult)
+{
+	if (!InTarget) return;
+
+	ASampleCharacter* CharacterUnit = Cast<ASampleCharacter>(InTarget);
+	if (!CharacterUnit) return;
+	CharacterUnit->HandleMonsterAttackResolved(nullptr, CharacterUnit, InResult);
 }
 
 void ABattleManager::SetReactionResult(EResultType InResult)
@@ -495,33 +428,29 @@ void ABattleManager::SetReactionResult(EResultType InResult)
 	CurrentResult = InResult;
 }
 
-
-void ABattleManager::ForceSetActionState(EActionState State)
+void ABattleManager::ForceSetActionState(EActionState InState)
 {
-	for (AUBCombatUnit* ps : PlayerList)
+	for (AUBCombatUnit* PlayerUnit : PlayerList)
 	{
-		if (ASampleCharacter* ch = Cast<ASampleCharacter>(ps))
+		if (ASampleCharacter* CharacterUnit = Cast<ASampleCharacter>(PlayerUnit))
 		{
-			ch->SetActionState(State);
+			CharacterUnit->SetActionState(InState);
 		}
 	}
 }
 
-void ABattleManager::DeathCharacterReMove(AUBCombatUnit* deathUnit)
+void ABattleManager::DeathCharacterRemove(AUBCombatUnit* InDeathUnit)
 {
-	if (ASampleCharacter* player = Cast<ASampleCharacter>(deathUnit))
+	if (ASampleCharacter* PlayerUnit = Cast<ASampleCharacter>(InDeathUnit))
 	{
-		PlayerList.Remove(player);
-		CurrentTurnOrder.Remove(player);
+		PlayerList.Remove(PlayerUnit);
+		CurrentTurnOrder.Remove(PlayerUnit);
 	}
-	else if(AUBBaseMonster* monster = Cast<AUBBaseMonster>(deathUnit))
+	else if (AUBBaseMonster* MonsterUnit = Cast<AUBBaseMonster>(InDeathUnit))
 	{
-		targetList.Remove(monster);
-		CurrentTurnOrder.Remove(monster);
+		TargetList.Remove(MonsterUnit);
+		CurrentTurnOrder.Remove(MonsterUnit);
 	}
-
-
-
 }
 
 void ABattleManager::GlobalTimeStop()
@@ -530,7 +459,7 @@ void ABattleManager::GlobalTimeStop()
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.0f);
 }
 
-void ABattleManager::UIHideAllWiget()
+void ABattleManager::UIHideAllWidget()
 {
 	OnUIHide.Broadcast();
 }
@@ -542,19 +471,21 @@ void ABattleManager::SetGlobalTimeReset()
 	OnTimeDelayEnded.Broadcast();
 }
 
-bool ABattleManager::bIsStun(AUBCombatUnit* unit)
+bool ABattleManager::IsStun(AUBCombatUnit* InUnit)
 {
-	if (unit->statsComp->currentStats.CurrState.Contains(EUnitState::Stun))
+	if (InUnit->statsComp->currentStats.CurrState.Contains(EUnitState::Stun))
 	{
-		unit->statsComp->currentStats.CurrState.Remove(EUnitState::Stun);
-		unit->ActiveBuffEffect();
+		InUnit->statsComp->currentStats.CurrState.Remove(EUnitState::Stun);
+		InUnit->ActiveBuffEffect();
 		return true;
 	}
 	return false;
 }
+
 void ABattleManager::GameOver_Implementation()
 {
 }
+
 void ABattleManager::GameClear_Implementation()
 {
 }
@@ -563,35 +494,37 @@ void ABattleManager::HandleGameEnd()
 {
 	if (!CheckGameEnd())
 	{
-		if (PlayerList.IsEmpty()) {
-
+		if (PlayerList.IsEmpty())
+		{
 			GameOver();
 		}
-		else if (targetList.IsEmpty()) {
+		else if (TargetList.IsEmpty())
+		{
 			GameClear();
-
 		}
 		return;
 	}
 }
 
-void ABattleManager::TargetAttack(AUBCombatUnit* target)
+void ABattleManager::TargetAttack(AUBCombatUnit* InTarget)
 {
-	ASampleCharacter* player = Cast<ASampleCharacter>(currentCharacter);
-	switch (player->GetCurrentActionState())
+	ASampleCharacter* PlayerUnit = Cast<ASampleCharacter>(CurrentCharacter);
+	if (!PlayerUnit) return;
+
+	switch (PlayerUnit->GetCurrentActionState())
 	{
 	case EActionState::Attack:
-		player->Attack(target);
+		PlayerUnit->Attack(InTarget);
 		break;
 	case EActionState::ActiveSkill:
-		player->ActiveSkill(target);
+		PlayerUnit->ActiveSkill(InTarget);
 		break;
-	case EActionState::UltiMateSkill:
-		player->UltiMateKSill(target);
+	case EActionState::UltimateSkill:
+		PlayerUnit->UltiMateKSill(InTarget);
 		break;
 	}
-
 }
+
 
 
 

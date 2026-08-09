@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,7 +7,8 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "Animation/Data/FBossPhaseEffect.h"
 #include "UBBaseMonster.generated.h"
-DECLARE_MULTICAST_DELEGATE(FOnActionFinished);
+
+DECLARE_MULTICAST_DELEGATE(FOnActionFinishedSignature);
 
 UCLASS()
 class UNIBIRTH_API AUBBaseMonster : public AUBCombatUnit
@@ -17,107 +16,93 @@ class UNIBIRTH_API AUBBaseMonster : public AUBCombatUnit
 	GENERATED_BODY()
 
 public:
-
 	AUBBaseMonster();
 
-
 protected:
-
 	virtual void BeginPlay() override;
 
-
 public:
-
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void ResolveTargetsFromSkill();
-	FCharacterSkill* ResolveSkillDataFromActionTag(const FGameplayTag& ActionTag);
-	void InterpRotateTo(const FRotator& TargetRot, float Speed, FTimerHandle& TimerHandle);
-	void StartAttackSequence(FGameplayTag ActionTag, AUBCombatUnit* target);
 
-	void startAttack();
+	void ResolveTargetsFromSkill();
+	FCharacterSkill* ResolveSkillDataFromActionTag(const FGameplayTag& InActionTag);
+	void InterpRotateTo(const FRotator& InTargetRot, float InSpeed, FTimerHandle& InTimerHandle);
+	void StartAttackSequence(FGameplayTag InActionTag, AUBCombatUnit* InTargetUnit);
+	void StartAttack();
 
 	virtual void AttackHit() override;
 	void MonsterOnActionFinished();
 	void NotifyAttackIntent();
 
-
-
-
-
-
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	ECurrentAttackType CurrentAttackType;
 
 	void AllPlayerIdle();
 	void MoveToTarget();
 	void StartMove();
-
 	void StartReturnMove();
 	void BeforeLocation();
 
-
-	void StartRotateToTarget(AUBCombatUnit* Target);
+	void StartRotateToTarget(AUBCombatUnit* InTargetUnit);
 	void RotateTickToTarget();
-
 	void RotateTickToOrigin();
-
 	void StartRotateMeshToOrigin();
 
-	 FCharacterSkill* CurrentSkillData;
+	FCharacterSkill* CurrentSkillData;
 
-	UPROPERTY()
-	TArray<AUBCombatUnit*> ResolvedTargets;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<TObjectPtr<AUBCombatUnit>> ResolvedTargets;
+
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	const TArray<AUBCombatUnit*>& GetResolvedTargets() const { return ResolvedTargets; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	FGameplayTag CurrentActionTag;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "State")
 	bool bActionStarted = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 	bool bIsAttack = false;
-
 
 	FVector MoveTargetLocation;
 	FRotator OriginRotator;
 	FRotator TargetRotator;
 
-	float rotateSpeed = 200.f;
-	FTimerHandle RotateTimerHandle;
-	FTimerHandle RotatoeToOrginTimerHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float RotateSpeed = 200.f;
 
-	FOnActionFinished OnActionFinishedDelegate;
+	FTimerHandle RotateTimerHandle;
+	FTimerHandle RotateToOriginTimerHandle;
+
+	FOnActionFinishedSignature OnActionFinishedDelegate;
 	void HandleShieldBroken();
 
-	bool bIsPlay = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	bool bIsPlaying = false;
 
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	EMonsterType monsterType;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Monster")
+	EMonsterType MonsterType;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Boss|Phase")
-	EBossPhase currentPhase;
+	EBossPhase CurrentPhase;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Boss|Phase")
 	TMap<EBossPhase, FBossPhaseEffect> PhaseEffectMap;
 
-
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	TObjectPtr<class UBehaviorTree> BehaviorTree;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<FGameplayTag> LastSkillList;
 
-	UPROPERTY(EditAnyWhere, BluePrintReadOnly)
-	TArray<FGameplayTag> lastSkillList;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	bool bIsRefill = false;
 
-
-	bool bisRefill = false;
-	UFUNCTION(BlueprintCallable)
-	 void SheildRefill();
-
+	UFUNCTION(BlueprintCallable, Category = "Shield")
+	void ShieldRefill();
 
 	virtual void DeathCharacter() override;
-
 };
+

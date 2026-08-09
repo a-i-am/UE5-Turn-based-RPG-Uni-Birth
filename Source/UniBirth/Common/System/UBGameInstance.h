@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -10,68 +8,67 @@
 #include "Common/SubSystem/UBSkillManager.h"
 #include "UBGameInstance.generated.h"
 
-
-
-
 UCLASS()
 class UNIBIRTH_API UUBGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
+
 public:
-	UPROPERTY(EditAnywhere)
-	UDataTable* EquipmentData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Item")
+	TObjectPtr<UDataTable> EquipmentData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* ConsumableData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Item")
+	TObjectPtr<UDataTable> ConsumableData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* MaterialData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Item")
+	TObjectPtr<UDataTable> MaterialData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* SkillData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Skill")
+	TObjectPtr<UDataTable> SkillData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* ComboBuffData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Buff")
+	TObjectPtr<UDataTable> ComboBuffData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* SkillBuffData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Buff")
+	TObjectPtr<UDataTable> SkillBuffData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* StatData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Stat")
+	TObjectPtr<UDataTable> StatData;
 
-	UPROPERTY(EditAnywhere)
-	UDataTable* RewardData;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data Table|Reward")
+	TObjectPtr<UDataTable> RewardData;
 
 	virtual void Init() override;
 
-	UFUNCTION(BlueprintCallable)
-	void GetSkillsForCharacter(ECharacterType CharacterID, TArray<FCharacterSkill>& OutSkills, TArray<FCharacterSkill>& OutPassvie);
-	UFUNCTION(BlueprintCallable)
-	UTexture2D* GetSkillIcon(FString SKillKey);
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	void GetSkillsForCharacter(ECharacterType InCharacterType, TArray<FCharacterSkill>& OutSkills, TArray<FCharacterSkill>& OutPassive);
 
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	UTexture2D* GetSkillIcon(FString InSkillKey);
 
-	FEquipmentStruct* GetEquipmentData(int32 ID);
+	FEquipmentStruct* GetEquipmentData(int32 InID);
 
-	FConsumableStruct* GetConsumableData(int32 ID);
+	FConsumableStruct* GetConsumableData(int32 InID);
 
-	FMaterialStruct* GetMaterialData(int32 ID);
+	FMaterialStruct* GetMaterialData(int32 InID);
 
-	UFUNCTION(BlueprintCallable)
-	FUBStats GetStatData(ECharacterType characterType);
+	UFUNCTION(BlueprintCallable, Category = "Stat")
+	FUBStats GetStatData(ECharacterType InCharacterType);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<class UUBSkillManager> SkillManager;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Manager")
+	TObjectPtr<UUBSkillManager> SkillManager;
 
-	FComboBuffData* GetComboBuffData(int32 ID);
+	FComboBuffData* GetComboBuffData(int32 InID);
 
-	FSkillBuffData* GetSkillBuffData(int32 ID);
+	FSkillBuffData* GetSkillBuffData(int32 InID);
 
 	UFUNCTION()
-	void HandlePreMouseButtonDown(const FPointerEvent& MouseEvent);
+	void HandlePreMouseButtonDown(const FPointerEvent& InMouseEvent);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Progress")
 	int32 CurrentStage;
 
-	UFUNCTION(BlueprintCallable)
-	TArray<int32> GetReward(int32 stage);
+	UFUNCTION(BlueprintCallable, Category = "Game Progress")
+	TArray<int32> GetReward(int32 InStage);
 };
+

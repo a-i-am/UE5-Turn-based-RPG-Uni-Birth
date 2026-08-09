@@ -1,72 +1,66 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "UBBattleHUD.generated.h"
 
-
-
+class UUserWidget;
+class AUBCharacterUI;
+class UUBBattleSelectBase;
 
 UCLASS()
 class UNIBIRTH_API AUBBattleHUD : public AHUD
 {
 	GENERATED_BODY()
+
 private:
 	AUBBattleHUD();
+
 protected:
 	virtual void BeginPlay() override;
 
-
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Main")
 	TSubclassOf<UUserWidget> MainUIClass;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|Main")
 	TObjectPtr<UUserWidget> MainUIWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<class AUBCharacterUI> CharacterUIClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Character")
+	TSubclassOf<AUBCharacterUI> CharacterUIClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	TObjectPtr<class AUBCharacterUI> CharacterUI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Character")
+	TObjectPtr<AUBCharacterUI> CharacterUI;
 
-	UPROPERTY(BlueprintReadOnly)
-	AUBCharacterUI* CharacterUIActor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|Character")
+	TObjectPtr<AUBCharacterUI> CharacterUIActor;
 
-
-
-
-
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Monster")
 	TSubclassOf<UUserWidget> MonsterHPClass;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI|Monster")
 	TObjectPtr<UUserWidget> MonsterHPWidget;
 
-	UPROPERTY(BlueprintReadWrite)
-	class UUBBattleSelectBase* CurrentWidget = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI|Select")
+	TObjectPtr<UUBBattleSelectBase> CurrentWidget = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Battle")
-	bool bIsAngry;
+	bool bIsAngry = false;
 
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "UI|Effect")
 	void ShowScreenGuardUI();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "UI|Effect")
 	void HideScreenGuardUI();
 
 	UFUNCTION()
 	void OnTimeDelayEnded_Internal();
 
-	UFUNCTION(BlueprintCallable)
-	bool GetIsAngry() { return bIsAngry; }
+	UFUNCTION(BlueprintCallable, Category = "Battle")
+	bool IsAngry() const { return bIsAngry; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	void InitHUD();
 };
+
 

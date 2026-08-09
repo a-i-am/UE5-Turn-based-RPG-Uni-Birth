@@ -1,9 +1,9 @@
 #include "Component/HealthComponent.h"
 #include "Animation/Data/UBCharacterFXProfile.h"
 #include "Kismet/GameplayStatics.h"
-#include  "Component/UBStatsComponent.h"
+#include "Component/UBStatsComponent.h"
 #include "Character/Interface/UBCombatUnit.h"
-
+#include "NiagaraFunctionLibrary.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -13,26 +13,24 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
-void UHealthComponent::Init(UUBStatsComponent* inStatComp)
+void UHealthComponent::Init(UUBStatsComponent* InStatComponent)
 {
+	StatComponent = InStatComponent;
 }
 
-void UHealthComponent::ApplyDamage(int32 DamageAmount, AUBCombatUnit* target,
-	const FCharacterActionFXOverride* ImpactFX, FVector ImpactScale, FRotator ImpactRotator, int32 hitCount)
+void UHealthComponent::ApplyDamage(int32 InDamageAmount, AUBCombatUnit* InTargetUnit,
+	const FCharacterActionFXOverride* InImpactFX, FVector InImpactScale, FRotator InImpactRotator, int32 InHitCount)
 {
-	if (!target || hitCount <= 0)
+	if (!InTargetUnit || InHitCount <= 0)
 		return;
 
-	int32 DamagePerHit = DamageAmount / hitCount;
+	int32 DamagePerHit = InDamageAmount / InHitCount;
 
+	InTargetUnit->PrintDamage(DamagePerHit);
 
-	target->PrintDamage(DamagePerHit);
-
-
-	int32& Shield = target->statsComp->currentStats.shield;
+	int32& Shield = InTargetUnit->statsComp->currentStats.shield;
 	if (Shield > 0)
 	{
 		if (Shield >= DamagePerHit)
@@ -44,84 +42,90 @@ void UHealthComponent::ApplyDamage(int32 DamageAmount, AUBCombatUnit* target,
 		{
 			DamagePerHit -= Shield;
 			Shield = 0;
-			target->HealthComp->OnShieldDestroy.Broadcast();
+			InTargetUnit->HealthComp->OnShieldDestroy.Broadcast();
 		}
 	}
 
- 	target->statsComp->currentStats.Hp -= DamagePerHit;
+	InTargetUnit->statsComp->currentStats.Hp -= DamagePerHit;
 
-	if (ImpactFX)
+	if (InImpactFX)
 	{
-		if (ImpactFX->Particle)
+		if (InImpactFX->Particle)
 		{
-			SpawnParticle(target, ImpactFX, ImpactScale, ImpactRotator);
+			SpawnParticle(InTargetUnit, InImpactFX, InImpactScale, InImpactRotator);
 		}
 		else
 		{
-			SpawnNiagara(target, ImpactFX, ImpactScale, ImpactRotator);
+			SpawnNiagara(InTargetUnit, InImpactFX, InImpactScale, InImpactRotator);
 		}
 	}
-	if (target->bIsDead()) return;
+	if (InTargetUnit->bIsDead()) return;
 
-	if (target->statsComp->currentStats.Hp <= 0)
+	if (InTargetUnit->statsComp->currentStats.Hp <= 0)
 	{
-		target->statsComp->currentStats.Hp = 0;
-		Death(target);
+		InTargetUnit->statsComp->currentStats.Hp = 0;
+		Death(InTargetUnit);
 		return;
 	}
 }
 
-bool UHealthComponent::bIsDead() const
+bool UHealthComponent::IsDead() const
 {
-	return statComp->currentStats.Hp <= 0;
+	if (!StatComponent) return false;
+	return StatComponent->currentStats.Hp <= 0;
 }
 
-void UHealthComponent::SpawnParticle(AUBCombatUnit* target, const FCharacterActionFXOverride* ImpactFX, FVector ImpactScale, FRotator ImpactRotator)
+void UHealthComponent::SpawnParticle(AUBCombatUnit* InTargetUnit, const FCharacterActionFXOverride* InImpactFX, FVector InImpactScale, FRotator InImpactRotator)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Black, TEXT(" SPAWN PARTICEL"));
-	(UGameplayStatics::SpawnEmitterAtLocation(
+	if (!InTargetUnit || !InImpactFX) return;
+	UGameplayStatics::SpawnEmitterAtLocation(
 		GetWorld(),
-		ImpactFX->Particle,
-		target->GetActorLocation(),
-		ImpactRotator,
-		ImpactScale));
+		InImpactFX->Particle,
+		InTargetUnit->GetActorLocation(),
+		InImpactRotator,
+		InImpactScale);
 }
 
-void UHealthComponent::SpawnNiagara(AUBCombatUnit* target,const FCharacterActionFXOverride* ImpactFX,
-	FVector ImpactScale, FRotator ImpactRotator)
+void UHealthComponent::SpawnNiagara(AUBCombatUnit* InTargetUnit, const FCharacterActionFXOverride* InImpactFX,
+	FVector InImpactScale, FRotator InImpactRotator)
 {
+	if (!InTargetUnit || !InImpactFX) return;
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 		GetWorld(),
-		ImpactFX->NiagaraFX,
-		target->GetActorLocation(),
-		ImpactRotator,
-		ImpactScale,
+		InImpactFX->NiagaraFX,
+		InTargetUnit->GetActorLocation(),
+		InImpactRotator,
+		InImpactScale,
 		true,
 		true
 	);
 }
 
-void UHealthComponent::Death(AUBCombatUnit* unit)
+void UHealthComponent::Death(AUBCombatUnit* InTargetUnit)
 {
-	unit->DeathCharacter();
+	if (InTargetUnit)
+	{
+		InTargetUnit->DeathCharacter();
+	}
 }
 
-void UHealthComponent::SpawnGuardParticle(AUBCombatUnit* unit)
+void UHealthComponent::SpawnGuardParticle(AUBCombatUnit* InTargetUnit)
 {
-	if (!unit || !GuardParticle) return;
+	if (!InTargetUnit || !GuardParticle) return;
 
-	const FVector UnitLocation = unit->GetActorLocation();
-	const FVector Forward = unit->GetActorForwardVector();
+	const FVector UnitLocation = InTargetUnit->GetActorLocation();
+	const FVector Forward = InTargetUnit->GetActorForwardVector();
 
 	const FVector SpawnLocation = UnitLocation + (Forward * 30.f);
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-		unit->GetWorld(),
+		InTargetUnit->GetWorld(),
 		GuardParticle,
 		SpawnLocation,
-		unit->GetActorRotation(),
+		InTargetUnit->GetActorRotation(),
 		FVector(1.f)
 	);
 }
+
 
 

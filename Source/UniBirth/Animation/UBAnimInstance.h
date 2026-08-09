@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,8 +6,9 @@
 #include "GamePlayTags/UBGameplayTags.h"
 #include "UBAnimInstance.generated.h"
 
-
-
+class UUBAnimationSet;
+class AUBBaseMonster;
+class ASampleCharacter;
 
 UCLASS()
 class UNIBIRTH_API UUBAnimInstance : public UAnimInstance
@@ -17,26 +16,28 @@ class UNIBIRTH_API UUBAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
-	void PlayMontageGeneric(FGameplayTag ActionTag);
-	virtual void NativeInitializeAnimation()override;
+	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Montage")
-	TObjectPtr<class UUBAnimationSet> animSet;
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void PlayMontageGeneric(FGameplayTag InActionTag);
 
-	UFUNCTION(BlueprintCallable)
-	void OnMontageEnd(UAnimMontage* Montage, bool bInterrupted);
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void OnMontageEnd(UAnimMontage* InMontage, bool bInInterrupted);
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	EActionState animCurrentState;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation|Montage")
+	TObjectPtr<UUBAnimationSet> AnimSet;
 
-	UPROPERTY()
-	TObjectPtr<class AUBBaseMonster> Monster;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation|State")
+	EActionState AnimCurrentState;
 
-	UPROPERTY()
-	TObjectPtr<class ASampleCharacter> Player;
+	UPROPERTY(BlueprintReadOnly, Category = "Animation|Owner")
+	TObjectPtr<AUBBaseMonster> Monster;
 
-	UPROPERTY(BlueprintReadOnly)
-	FTransform leftHandSocket;
+	UPROPERTY(BlueprintReadOnly, Category = "Animation|Owner")
+	TObjectPtr<ASampleCharacter> Player;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation|IK")
+	FTransform LeftHandSocket;
 };
+

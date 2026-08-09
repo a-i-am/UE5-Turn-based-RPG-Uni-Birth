@@ -27,7 +27,7 @@ void UUBGameInstance::HandlePreMouseButtonDown(const FPointerEvent& MouseEvent)
 	UE_LOG(LogTemp, Warning, TEXT("@@ Global Click Event"));
 }
 
-TArray<int32> UUBGameInstance::GetReward(int32 stage)
+TArray<int32> UUBGameInstance::GetReward(int32 InStage)
 {
 	TArray<int32> ResultItemIDs;
 
@@ -36,28 +36,24 @@ TArray<int32> UUBGameInstance::GetReward(int32 stage)
 
 	TMap<int32, TArray<FRewardStruct>> RandomCaseMap;
 
-
 	static const FString Context(TEXT("RewardContext"));
 	TArray<FRewardStruct*> Rows;
 	RewardData->GetAllRows(Context, Rows);
 
 	for (FRewardStruct* Row : Rows)
 	{
-		if (!Row || Row->Level != stage)
+		if (!Row || Row->Level != InStage)
 			continue;
 
 		if (Row->RandomCase == 0)
 		{
-
 			ResultItemIDs.Add(Row->ItemID);
 		}
 		else
 		{
-
 			RandomCaseMap.FindOrAdd(Row->RandomCase).Add(*Row);
 		}
 	}
-
 
 	for (auto& Pair : RandomCaseMap)
 	{
@@ -90,71 +86,69 @@ TArray<int32> UUBGameInstance::GetReward(int32 stage)
 	return ResultItemIDs;
 }
 
-void UUBGameInstance::GetSkillsForCharacter(ECharacterType CharacterID, TArray<FCharacterSkill>& OutSkills,
-	TArray<FCharacterSkill>&OutPassvie)
+void UUBGameInstance::GetSkillsForCharacter(ECharacterType InCharacterType, TArray<FCharacterSkill>& OutSkills, TArray<FCharacterSkill>& OutPassive)
 {
-
 	OutSkills.Empty();
-	OutPassvie.Empty();
+	OutPassive.Empty();
 	TArray<FCharacterSkill*> Rows;
 	SkillData->GetAllRows(TEXT("Load"), Rows);
 	for (auto Row : Rows)
 	{
-		if (Row && Row->using_character != CharacterID)
+		if (Row && Row->using_character != InCharacterType)
 		{
 			continue;
 		}
 		if (Row->skill_key.Contains(TEXT("SKILL_PASSIVE")))
-			OutPassvie.Add(*Row);
+			OutPassive.Add(*Row);
 		else
 			OutSkills.Add(*Row);
 	}
 }
 
-UTexture2D* UUBGameInstance::GetSkillIcon(FString SKillKey)
+UTexture2D* UUBGameInstance::GetSkillIcon(FString InSkillKey)
 {
 	FCharacterSkill* Row = SkillData->FindRow<FCharacterSkill>(
-		FName(SKillKey),
+		FName(InSkillKey),
 		TEXT("GetSkillIcon")
 	);
-	if (Row == nullptr)return nullptr;
-	if (Row->skill_icon!=nullptr)
+	if (Row == nullptr) return nullptr;
+	if (Row->skill_icon != nullptr)
 		return Row->skill_icon.Get();
 
 	return Row->skill_icon;
 }
 
-FEquipmentStruct* UUBGameInstance::GetEquipmentData(int32 ID)
+FEquipmentStruct* UUBGameInstance::GetEquipmentData(int32 InID)
 {
 	if (EquipmentData == nullptr)
 	{
 		return nullptr;
 	}
 
-	return EquipmentData->FindRow<FEquipmentStruct>(*FString::FromInt(ID), TEXT(""));
+	return EquipmentData->FindRow<FEquipmentStruct>(*FString::FromInt(InID), TEXT(""));
 }
 
-FConsumableStruct* UUBGameInstance::GetConsumableData(int32 ID)
+FConsumableStruct* UUBGameInstance::GetConsumableData(int32 InID)
 {
 	if (ConsumableData == nullptr)
 	{
 		return nullptr;
 	}
 
-	return ConsumableData->FindRow<FConsumableStruct>(*FString::FromInt(ID), TEXT(""));
+	return ConsumableData->FindRow<FConsumableStruct>(*FString::FromInt(InID), TEXT(""));
 }
 
-FMaterialStruct* UUBGameInstance::GetMaterialData(int32 ID)
+FMaterialStruct* UUBGameInstance::GetMaterialData(int32 InID)
 {
 	if (MaterialData == nullptr)
 	{
 		return nullptr;
 	}
 
-	return MaterialData->FindRow<FMaterialStruct>(*FString::FromInt(ID), TEXT(""));
+	return MaterialData->FindRow<FMaterialStruct>(*FString::FromInt(InID), TEXT(""));
 }
 
-FUBStats UUBGameInstance::GetStatData(ECharacterType characterType)
+FUBStats UUBGameInstance::GetStatData(ECharacterType InCharacterType)
 {
 	FUBStats empty;
 	if (StatData == nullptr)
@@ -163,27 +157,27 @@ FUBStats UUBGameInstance::GetStatData(ECharacterType characterType)
 	}
 
 	const UEnum* EnumPtr = StaticEnum<ECharacterType>();
-	FString EnumString = EnumPtr->GetNameStringByValue((int64)characterType);
+	FString EnumString = EnumPtr->GetNameStringByValue((int64)InCharacterType);
 	FName RowName = FName(*EnumString);
 
-	switch (characterType)
+	switch (InCharacterType)
 	{
-	case ECharacterType::CT_Uni:
+	case ECharacterType::Uni:
 		RowName = FName(TEXT("Uni"));
 		break;
-	case ECharacterType::CT_Tau:
+	case ECharacterType::Tau:
 		RowName = FName(TEXT("Tau"));
 		break;
-	case ECharacterType::CT_Elvasia:
+	case ECharacterType::Elvasia:
 		RowName = FName(TEXT("Elvasia"));
 		break;
-	case ECharacterType::CT_Common:
+	case ECharacterType::Common:
 		RowName = FName(TEXT("Celestial"));
 		break;
-	case ECharacterType::CT_Elite:
+	case ECharacterType::Elite:
 		RowName = FName(TEXT("Basilisk"));
 		break;
-	case ECharacterType::CT_Boss:
+	case ECharacterType::Boss:
 		RowName = FName(TEXT("Perses"));
 		break;
 	default:
@@ -194,22 +188,23 @@ FUBStats UUBGameInstance::GetStatData(ECharacterType characterType)
 	return (stats) ? *stats : empty;
 }
 
-FComboBuffData* UUBGameInstance::GetComboBuffData(int32 ID)
+FComboBuffData* UUBGameInstance::GetComboBuffData(int32 InID)
 {
 	if (ComboBuffData == nullptr)
 	{
 		return nullptr;
 	}
 
-	return ComboBuffData->FindRow<FComboBuffData>(*FString::FromInt(ID), TEXT(""));
+	return ComboBuffData->FindRow<FComboBuffData>(*FString::FromInt(InID), TEXT(""));
 }
 
-FSkillBuffData* UUBGameInstance::GetSkillBuffData(int32 ID)
+FSkillBuffData* UUBGameInstance::GetSkillBuffData(int32 InID)
 {
 	if (SkillBuffData == nullptr)
 	{
 		return nullptr;
 	}
 
-	return SkillBuffData->FindRow<FSkillBuffData>(*FString::FromInt(ID), TEXT(""));
+	return SkillBuffData->FindRow<FSkillBuffData>(*FString::FromInt(InID), TEXT(""));
 }
+
