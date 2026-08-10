@@ -55,19 +55,20 @@ GitHub에서 큰 MP4 파일은 미리보기가 제한될 수 있어, 영상은 [
 
 | 모듈 구분 | 파일 / 경로 | 담당 및 핵심 로직 설명 |
 | :--- | :--- | :--- |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **Component** | [`UBComboBuffComponent.h`](Source/UniBirth/Component/UBComboBuffComponent.h) / [`.cpp`](Source/UniBirth/Component/UBComboBuffComponent.cpp) | **동일 등급 버프의 연쇄 합성 (C➔B➔A➔MAX) 및 슬롯 동기화 시스템** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **Component** | [`UBBuffComponent.h`](Source/UniBirth/Component/UBBuffComponent.h) / [`.cpp`](Source/UniBirth/Component/UBBuffComponent.cpp) | **스킬 버프/디버프 적용, 지속 시간 계산 및 해제(`EDelCase`) 관리** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **Battle / Core** | [`SampleCharacter.h`](Source/UniBirth/Battle/SampleCharacter.h) / [`.cpp`](Source/UniBirth/Battle/SampleCharacter.cpp) | **플레이어 회피·패링 QTE 판정 처리, 반격(Counter) 및 데미지 연동** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **UI / QTE** | [`UBDodgeUI.h`](Source/UniBirth/UI/Combat/Combo/UBDodgeUI.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBDodgeUI.cpp) | **회피 QTE 커맨드 방향키 UI 및 슬롯 입력 상태 동기화** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **UI / QTE** | [`UBParryUI.h`](Source/UniBirth/UI/Combat/Combo/UBParryUI.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBParryUI.cpp) | **패링 QTE 게이지 프로그레스 및 서클 타이밍 판정 UI** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **UI / QTE** | [`UBDodgeKeySlot.h`](Source/UniBirth/UI/Combat/Combo/UBDodgeKeySlot.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBDodgeKeySlot.cpp) | **QTE 입력 슬롯 키 바인딩 및 애니메이션 연동** |
-| <img src="https://img.shields.io/badge/⭐_담당_작업-FF5722?style=flat-square"/> **Common / Data** | [`UBBuffData.h`](Source/UniBirth/Common/Data/UBBuffData.h) | **데이터 테이블(CSV) 기반 버프/QTE 스탯 및 콤보 데이터 구조** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **Component** | [`UBComboBuffComponent.h`](Source/UniBirth/Component/UBComboBuffComponent.h) / [`.cpp`](Source/UniBirth/Component/UBComboBuffComponent.cpp) | **동일 등급 버프의 연쇄 합성 (C➔B➔A➔MAX) 및 슬롯 동기화 시스템** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **Component** | [`UBBuffComponent.h`](Source/UniBirth/Component/UBBuffComponent.h) / [`.cpp`](Source/UniBirth/Component/UBBuffComponent.cpp) | **스킬 버프/디버프 적용, 지속 시간 계산 및 해제(`EDelCase`) 관리** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **Battle / Core** | [`SampleCharacter.h`](Source/UniBirth/Battle/SampleCharacter.h) / [`.cpp`](Source/UniBirth/Battle/SampleCharacter.cpp) | **플레이어 회피·패링 QTE 판정 처리, 반격(Counter) 및 데미지 연동** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **UI / QTE** | [`UBDodgeUI.h`](Source/UniBirth/UI/Combat/Combo/UBDodgeUI.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBDodgeUI.cpp) | **회피 QTE 커맨드 방향키 UI 및 슬롯 입력 상태 동기화** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **UI / QTE** | [`UBParryUI.h`](Source/UniBirth/UI/Combat/Combo/UBParryUI.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBParryUI.cpp) | **패링 QTE 게이지 프로그레스 및 서클 타이밍 판정 UI** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **UI / QTE** | [`UBDodgeKeySlot.h`](Source/UniBirth/UI/Combat/Combo/UBDodgeKeySlot.h) / [`.cpp`](Source/UniBirth/UI/Combat/Combo/UBDodgeKeySlot.cpp) | **QTE 입력 슬롯 키 바인딩 및 애니메이션 연동** |
+| <img src="https://img.shields.io/badge/⭐-FF5722?style=flat-square"/> **Common / Data** | [`UBBuffData.h`](Source/UniBirth/Common/Data/UBBuffData.h) | **데이터 테이블(CSV) 기반 버프/QTE 스탯 및 콤보 데이터 구조** |
 | **Component** | [`HealthComponent.h`](Source/UniBirth/Component/HealthComponent.h) / [`.cpp`](Source/UniBirth/Component/HealthComponent.cpp) | 체력, 실드 차감 및 사망 처리, 나이아가라 이펙트 스폰 |
 | **Battle** | [`BattleManager.h`](Source/UniBirth/Battle/BattleManager.h) / [`.cpp`](Source/UniBirth/Battle/BattleManager.cpp) | 턴 순서 정렬, 몬스터 공격 의도 브로드캐스트 및 턴 진행 제어 |
 | **Character** | [`UBPlayer.h`](Source/UniBirth/Character/UBPlayer.h) / [`.cpp`](Source/UniBirth/Character/UBPlayer.cpp) | 플레이어 캐릭터 기본 액터, 스프링암/카메라, 총기/드론 에셋 |
 | **Character** | [`UBBaseMonster.h`](Source/UniBirth/Character/Enemy/UBBaseMonster.h) / [`.cpp`](Source/UniBirth/Character/Enemy/UBBaseMonster.cpp) | 몬스터/보스 페이즈 공격 시퀀스 및 회전/이동 타이머 |
 | **Common** | [`UBdefine.h`](Source/UniBirth/Common/UBdefine.h) / [`.cpp`](Source/UniBirth/Common/UBdefine.cpp) | 프로젝트 전체 열거형(Enum) 및 글로벌 상수 관리 |
 | **Common** | [`UBGameInstance.h`](Source/UniBirth/Common/System/UBGameInstance.h) / [`.cpp`](Source/UniBirth/Common/System/UBGameInstance.cpp) | 데이터 테이블 로딩, 스탯 및 아이템/스킬 메인 게이트웨이 |
+
 
 #### 디렉토리 트리 구조
 
